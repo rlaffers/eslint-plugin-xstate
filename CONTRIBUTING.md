@@ -45,7 +45,7 @@ Feel free to star the repository. Increasing the visibility of the project will 
 
 ### Prettier
 
-We use [Prettier](https://prettier.io/) to format the source code. You can either [integrate Prettier into your editor](integrate Prettier into your editor), or run it from the command line:
+We use [Prettier](https://prettier.io/) to format the source code. You can either [integrate Prettier into your editor](https://prettier.io/docs/en/editors.html), or run it from the command line:
 
 ```
 npm run format
@@ -61,7 +61,7 @@ npm run lint
 
 ### Tests
 
-When adding or changing linting rules [please write unit tests](tests/lib/rules/). Execute all tests before comitting:
+When adding or changing linting rules [please write unit tests](tests/lib/rules/). Execute all tests before committing:
 
 ```
 npm test
