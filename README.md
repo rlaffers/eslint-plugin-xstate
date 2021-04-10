@@ -2,7 +2,7 @@
 
 ESLint plugin to check for common mistakes and enforce good practices when using [XState library](https://xstate.js.org/).
 
-[![GitHub version](https://badge.fury.io/gh/Naereen%2FStrapDown.js.svg)](https://github.com/Naereen/StrapDown.js)
+[![GitHub version](https://img.shields.io/github/package-json/v/rlaffers/eslint-plugin-xstate)](https://github.com/rlaffers/eslint-plugin-xstate)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
