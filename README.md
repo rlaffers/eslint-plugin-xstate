@@ -58,5 +58,7 @@ This plugin exports a recommended configuration. To enable this configuration us
 
 ## TODO
 
-- incorrect stopping of actors with Intepreter#stop method
-- enforce UPPERCASE event names
+- detect incorrect stopping of actors with Intepreter#stop method
+- recommend UPPERCASE event names
+- detect infinite loops
+- detect missing initial state for non-parallel state nodes

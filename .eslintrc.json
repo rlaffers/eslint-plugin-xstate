@@ -1,0 +1,8 @@
+{
+  "root": true,
+  "extends": ["standard", "plugin:node/recommended", "prettier"],
+  "env": {
+    "node": true,
+    "jest": true
+  }
+}
