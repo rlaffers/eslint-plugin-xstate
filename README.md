@@ -2,6 +2,10 @@
 
 ESLint plugin to check for common mistakes and enforce good practices when using [XState library](https://xstate.js.org/).
 
+[![GitHub version](https://badge.fury.io/gh/Naereen%2FStrapDown.js.svg)](https://github.com/Naereen/StrapDown.js)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
+
 ## Installation
 
 You'll first need to install [ESLint](http://eslint.org):
@@ -48,9 +52,9 @@ This plugin exports a recommended configuration. To enable this configuration us
 
 ## Supported Rules
 
-| Rule        | Description                      | Configurations |
-| ----------- | -------------------------------- | -------------- |
-| spawn-usage | Enforce correct usage of `spawn` | recommended    |
+| Rule                                     | Description                      | Configurations |
+| ---------------------------------------- | -------------------------------- | -------------- |
+| [spawn-usage](docs/rules/spawn-usage.md) | Enforce correct usage of `spawn` | recommended    |
 
 ## TODO
 
