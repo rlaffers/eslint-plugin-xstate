@@ -2,13 +2,18 @@
   "name": "eslint-plugin-xstate",
   "version": "0.0.1",
   "description": "ESLint rules for XState",
-  "keywords": ["eslint", "eslintplugin", "eslint-plugin"],
+  "keywords": [
+    "eslint",
+    "eslintplugin",
+    "eslint-plugin"
+  ],
   "author": "Richard Laffers",
   "main": "lib/index.js",
   "scripts": {
-    "test": "jest --watch",
+    "test": "jest",
     "lint": "eslint lib/",
-    "format": "prettier --write README.md {lib,docs,tests}/**/*.{js,md}"
+    "format": "prettier --write README.md {lib,docs,tests}/**/*.{js,md}",
+    "prepare": "husky install"
   },
   "dependencies": {},
   "devDependencies": {
@@ -19,7 +24,8 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
     "jest": "^26.6.3",
-    "prettier": "^2.2.1"
+    "prettier": "^2.2.1",
+    "husky": "^6.0.0"
   },
   "peerDependencies": {
     "eslint": "^7.1.0"
