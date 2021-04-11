@@ -11,6 +11,7 @@
   "main": "lib/index.js",
   "scripts": {
     "test": "jest",
+    "test:watch": "jest --watch",
     "lint": "eslint lib/",
     "format": "prettier --write README.md {lib,docs,tests}/**/*.{js,md}",
     "prepare": "husky install"
