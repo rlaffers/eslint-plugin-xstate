@@ -61,10 +61,17 @@ There is also an `all` configuration which includes every available rule. It enf
 
 ## Supported Rules
 
-| Rule                                     | Description                         | Recommended        |
-| ---------------------------------------- | ----------------------------------- | ------------------ |
-| [spawn-usage](docs/rules/spawn-usage.md) | Enforce correct usage of `spawn`    | :heavy_check_mark: |
-| [event-names](docs/rules/event-names.md) | Suggest using MACRO_CASE for events |                    |
+### Possible Errors
+
+| Rule                                     | Description                      | Recommended        |
+| ---------------------------------------- | -------------------------------- | ------------------ |
+| [spawn-usage](docs/rules/spawn-usage.md) | Enforce correct usage of `spawn` | :heavy_check_mark: |
+
+### Stylistic Issues
+
+| Rule                                     | Description                         | Recommended |
+| ---------------------------------------- | ----------------------------------- | ----------- |
+| [event-names](docs/rules/event-names.md) | Suggest using MACRO_CASE for events |             |
 
 ## TODO
 
@@ -73,3 +80,7 @@ There is also an `all` configuration which includes every available rule. It enf
 - detect missing initial state for non-parallel state nodes
 - add an option to restrict matchers to the scope of state machine declarations
 - improve event-names to lint `type` values in event objects
+- recommend not using inline implementations of actions, services, guards, activities
+- detect imperative usage of action creators
+- the onDone transition should not be defined on the root node of the machine
+- detect incorrect usage of invoke

@@ -27,7 +27,7 @@ Pull requests are encouraged! If you have a fix or a new linting rule to contrib
    > Whenever you want to update your version of `master`, do a regular `git pull`.
 4. Make your changes. Ensure that your code is formatted by [Prettier](https://prettier.io) and passes [ESLint](https://eslint.org) checks.
 5. Run `npm test`.
-6. Push you branch and open a PR. :tada:
+6. Push your branch and open a PR. :tada:
 
 ### Suggesting improvements
 
