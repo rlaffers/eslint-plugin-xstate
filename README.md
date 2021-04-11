@@ -55,10 +55,11 @@ This plugin exports a recommended configuration. To enable this configuration us
 | Rule                                     | Description                      | Configurations |
 | ---------------------------------------- | -------------------------------- | -------------- |
 | [spawn-usage](docs/rules/spawn-usage.md) | Enforce correct usage of `spawn` | recommended    |
+| [event-names](docs/rules/event-names.md) | Suggest using MACRO_CASE for events | recommended    |
 
 ## TODO
 
 - detect incorrect stopping of actors with Intepreter#stop method
-- recommend UPPERCASE event names
 - detect infinite loops
 - detect missing initial state for non-parallel state nodes
+- add an option to restrict matchers to the scope of state machine declarations
