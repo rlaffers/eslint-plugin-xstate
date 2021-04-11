@@ -63,3 +63,4 @@ This plugin exports a recommended configuration. To enable this configuration us
 - detect infinite loops
 - detect missing initial state for non-parallel state nodes
 - add an option to restrict matchers to the scope of state machine declarations
+- improve event-names to lint `type` values in event objects
