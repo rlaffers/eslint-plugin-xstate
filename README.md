@@ -75,10 +75,9 @@ There is also an `all` configuration which includes every available rule. It enf
 
 ## TODO
 
-- detect incorrect stopping of actors with Intepreter#stop method
 - detect infinite loops
-- detect missing initial state for non-parallel state nodes
-- add an option to restrict matchers to the scope of state machine declarations
+- write docs for event-name
+- add an option to restrict some matchers to the scope of state machine declarations
 - improve event-names to lint `type` values in event objects
 - recommend not using inline implementations of actions, services, guards, activities
 - detect imperative usage of action creators

@@ -74,7 +74,10 @@ const tests = {
         },
         {
           messageId: 'invalidEventName',
-          data: { eventName: 'Malformed Event.name1%$#', fixedEventName: 'MALFORMED_EVENT_NAME_1' },
+          data: {
+            eventName: 'Malformed Event.name1%$#',
+            fixedEventName: 'MALFORMED_EVENT_NAME_1',
+          },
         },
       ],
       output: `
@@ -109,7 +112,10 @@ const tests = {
         },
         {
           messageId: 'invalidEventName',
-          data: { eventName: 'Malformed Event.name1%$#', fixedEventName: 'MALFORMED_EVENT_NAME_1' },
+          data: {
+            eventName: 'Malformed Event.name1%$#',
+            fixedEventName: 'MALFORMED_EVENT_NAME_1',
+          },
         },
       ],
       output: `
