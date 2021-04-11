@@ -35,14 +35,15 @@ Then configure the rules you want to use under the rules section.
 ```json
 {
   "rules": {
-    "xstate/spawn-usage": "error"
+    "xstate/spawn-usage": "error",
+    "xstate/event-names": "warn"
   }
 }
 ```
 
 ## Shareable Configurations
 
-This plugin exports a recommended configuration. To enable this configuration use the `extends` property in your `.eslintrc.js` config file:
+This plugin exports a `recommended` configuration which checks for common mistakes. To enable this configuration use the `extends` property in your `.eslintrc.js` config file:
 
 ```json
 {
@@ -50,12 +51,20 @@ This plugin exports a recommended configuration. To enable this configuration us
 }
 ```
 
+There is also an `all` configuration which includes every available rule. It enforces both correct usage and best XState practices.
+
+```json
+{
+  "extends": ["plugin:xstate/all"]
+}
+```
+
 ## Supported Rules
 
-| Rule                                     | Description                      | Configurations |
-| ---------------------------------------- | -------------------------------- | -------------- |
-| [spawn-usage](docs/rules/spawn-usage.md) | Enforce correct usage of `spawn` | recommended    |
-| [event-names](docs/rules/event-names.md) | Suggest using MACRO_CASE for events | recommended    |
+| Rule                                     | Description                         | Recommended        |
+| ---------------------------------------- | ----------------------------------- | ------------------ |
+| [spawn-usage](docs/rules/spawn-usage.md) | Enforce correct usage of `spawn`    | :heavy_check_mark: |
+| [event-names](docs/rules/event-names.md) | Suggest using MACRO_CASE for events |                    |
 
 ## TODO
 
