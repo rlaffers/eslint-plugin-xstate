@@ -2,7 +2,7 @@
 
 ESLint plugin to check for common mistakes and enforce good practices when using [XState library](https://xstate.js.org/).
 
-[![npm version](https://img.shields.io/npm/v/eslint-plugin-xstate)](https://github.com/rlaffers/eslint-plugin-xstate)
+[![npm version](https://img.shields.io/npm/v/eslint-plugin-xstate)](https://npmjs.com/package/eslint-plugin-xstate)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
@@ -83,3 +83,4 @@ There is also an `all` configuration which includes every available rule. It enf
 - detect imperative usage of action creators
 - the onDone transition should not be defined on the root node of the machine
 - detect incorrect usage of invoke
+- detect invalid usage of transition declaration for actions (guarded entry/exit actions must be done with `choose`)
