@@ -17,8 +17,9 @@ A clear and concise description of what you expected to happen.
 A clear and concise description of what happened instead.
 
 **Versions (please complete the following information):**
- - eslint: [e.g. 7.23.0]
- - eslint-plugin-xstate: [e.g. 1.0.0]
+ - Node version: [replace this]
+ - ESLint version: [replace this]
+ - eslint-plugin-xstate version: [replace this]
 
 **Additional context**
 Add any other context about the problem here.
