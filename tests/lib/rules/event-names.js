@@ -9,7 +9,7 @@ const tests = {
           idle: {
             on: {
               TOGGLE: 'busy',
-              START_WORK: 'busy',
+              START_WORK_1: 'busy',
               'RUN': 'busy',
               '*': 'busy',
               // dynamic keys are always valid
@@ -24,7 +24,7 @@ const tests = {
       createMachine({
         on: {
           TOGGLE: 'busy',
-          START_WORK: 'busy',
+          START_WORK_1: 'busy',
           'RUN': 'busy',
           '*': 'busy',
           [eventName]: 'busy'
@@ -36,7 +36,7 @@ const tests = {
       Machine({
         on: {
           TOGGLE: 'busy',
-          START_WORK: 'busy',
+          START_WORK_1: 'busy',
           'RUN': 'busy',
           '*': 'busy',
           [eventName]: 'busy'
@@ -60,7 +60,7 @@ const tests = {
         createMachine({
           on: {
             badEventName: 'busy',
-            poor_name: 'busy',
+            poor_name1: 'busy',
             'Malformed Event.name1%$#': 'busy'
           }
         })
@@ -72,7 +72,7 @@ const tests = {
         },
         {
           messageId: 'invalidEventName',
-          data: { eventName: 'poor_name', fixedEventName: 'POOR_NAME' },
+          data: { eventName: 'poor_name1', fixedEventName: 'POOR_NAME_1' },
         },
         {
           messageId: 'invalidEventName',
@@ -86,7 +86,7 @@ const tests = {
         createMachine({
           on: {
             BAD_EVENT_NAME: 'busy',
-            POOR_NAME: 'busy',
+            POOR_NAME_1: 'busy',
             MALFORMED_EVENT_NAME_1: 'busy'
           }
         })
@@ -98,7 +98,7 @@ const tests = {
         Machine({
           on: {
             badEventName: 'busy',
-            poor_name: 'busy',
+            poor_name1: 'busy',
             'Malformed Event.name1%$#': 'busy'
           }
         })
@@ -110,7 +110,7 @@ const tests = {
         },
         {
           messageId: 'invalidEventName',
-          data: { eventName: 'poor_name', fixedEventName: 'POOR_NAME' },
+          data: { eventName: 'poor_name1', fixedEventName: 'POOR_NAME_1' },
         },
         {
           messageId: 'invalidEventName',
@@ -124,7 +124,7 @@ const tests = {
         Machine({
           on: {
             BAD_EVENT_NAME: 'busy',
-            POOR_NAME: 'busy',
+            POOR_NAME_1: 'busy',
             MALFORMED_EVENT_NAME_1: 'busy'
           }
         })
