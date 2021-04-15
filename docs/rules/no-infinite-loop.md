@@ -40,9 +40,9 @@ createMachine({
   },
 })
 
-// ❌ No guard, no target. The action on the 2nd transition does not
-// update the context, so executing it will not make the 1st transition
-// valid on the next evaluation.
+// ❌ The action on the 2nd transition does not update the context,
+// so executing it will not make the 1st transition valid on the next evaluation.
+// (or the 1st transition is always taken, so the 2nd transition is useless)
 createMachine({
   states: {
     deciding: {
@@ -51,6 +51,7 @@ createMachine({
           cond: (ctx) => ctx.count > 5,
           target: 'idle',
         },
+        // no guard, no target, no assign action
         {
           actions: () => console.log('hello'),
         },
@@ -60,7 +61,7 @@ createMachine({
 })
 
 // ❌ No guard, no target. Even though it updates the context,
-// it is the first transition in sequence, so it is being taken ad infinitum.
+// it is the first transition in sequence, so it will be taken ad infinitum.
 createMachine({
   states: {
     deciding: {
@@ -106,7 +107,7 @@ createMachine({
 Examples of **correct** code for this rule:
 
 ```javascript
-// ✅ Has target, always transitions to another state
+// ✅ Has target
 createMachine({
   states: {
     deciding: {
@@ -124,7 +125,7 @@ createMachine({
 })
 
 // ✅ The second transition updates the context, so there's a chance
-// that the first transition will eventually become valid
+// that the first transition will eventually become valid.
 createMachine({
   states: {
     deciding: {
@@ -142,7 +143,7 @@ createMachine({
 })
 
 // ✅ We are optimistic about the 2nd transition action updating the context.
-// Therefore there's a chance that the first transition will eventually become valid
+// Therefore there's a chance that the first transition will eventually become valid.
 createMachine({
   states: {
     deciding: {
