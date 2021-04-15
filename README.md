@@ -37,7 +37,8 @@ Then configure the rules you want to use under the rules section.
   "rules": {
     "xstate/spawn-usage": "error",
     "xstate/no-infinite-loop": "error",
-    "xstate/event-names": "warn"
+    "xstate/event-names": "warn",
+    "xstate/no-inline-implementation": "warn"
   }
 }
 ```
@@ -69,6 +70,12 @@ There is also an `all` configuration which includes every available rule. It enf
 | [spawn-usage](docs/rules/spawn-usage.md)           | Enforce correct usage of `spawn`                 | :heavy_check_mark: |
 | [no-infinite-loop](docs/rules/no-infinite-loop.md) | Detect infinite loops with eventless transitions | :heavy_check_mark: |
 
+### Best Practices
+
+| Rule                                                               | Description                                                           | Recommended |
+| ------------------------------------------------------------------ | --------------------------------------------------------------------- | ----------- |
+| [no-inline-implementation](docs/rules/no-inline-implementation.md) | Suggest refactoring guards, actions and services into machine options |             |
+
 ### Stylistic Issues
 
 | Rule                                     | Description                         | Recommended |
@@ -80,7 +87,6 @@ There is also an `all` configuration which includes every available rule. It enf
 - add test for no-infinite-loop
 - add an option to restrict some matchers to the scope of state machine declarations
 - improve event-names to lint `type` values in event objects
-- recommend not using inline implementations of actions, services, guards, activities
 - detect imperative usage of action creators
 - the onDone transition should not be defined on the root node of the machine
 - detect incorrect usage of invoke
