@@ -77,7 +77,6 @@ There is also an `all` configuration which includes every available rule. It enf
 
 ## TODO
 
-- write docs for no-infinite-loop
 - add test for no-infinite-loop
 - add an option to restrict some matchers to the scope of state machine declarations
 - improve event-names to lint `type` values in event objects
@@ -86,3 +85,4 @@ There is also an `all` configuration which includes every available rule. It enf
 - the onDone transition should not be defined on the root node of the machine
 - detect incorrect usage of invoke
 - detect invalid usage of transition declaration for actions (guarded entry/exit actions must be done with `choose`)
+- onDone transition declared on a state node instead of within `invoke`. onDone is valid on compound state nodes only.
