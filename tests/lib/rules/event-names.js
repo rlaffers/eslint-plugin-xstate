@@ -11,6 +11,8 @@ const tests = {
               TOGGLE: 'busy',
               START_WORK: 'busy',
               'RUN': 'busy',
+              '*': 'busy',
+              // dynamic keys are always valid
               [eventName]: 'busy'
             }
           },
@@ -24,7 +26,7 @@ const tests = {
           TOGGLE: 'busy',
           START_WORK: 'busy',
           'RUN': 'busy',
-          // dynamic keys are always valid
+          '*': 'busy',
           [eventName]: 'busy'
         }
       })
@@ -36,7 +38,7 @@ const tests = {
           TOGGLE: 'busy',
           START_WORK: 'busy',
           'RUN': 'busy',
-          // dynamic keys are always valid
+          '*': 'busy',
           [eventName]: 'busy'
         }
       })
