@@ -16,6 +16,13 @@ createMachine({
     poor_name: 'busy',
     'Malformed Event Name': 'busy',
   },
+  entry: [
+    send('invalidEventName'),
+    respond('cant.be.this'),
+    sendParent('poor_name'),
+    raise('bad name'),
+    send({ type: 'invalidEventName' }),
+  ],
 })
 ```
 
@@ -30,6 +37,13 @@ createMachine({
     RUN: 'busy',
     [eventName]: 'busy',
   },
+  entry: [
+    send('INVALID_EVENT_NAME'),
+    respond('CANT_BE_THIS'),
+    sendParent('POOR_NAME'),
+    raise('BAD_NAME'),
+    send({ type: 'INVALID_EVENT_NAME' }),
+  ],
 })
 
 // ✅ objects outside of machine declarations are not relevant for this rule

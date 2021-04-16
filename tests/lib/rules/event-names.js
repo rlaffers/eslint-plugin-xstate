@@ -52,6 +52,27 @@ const tests = {
         }
       }
     `,
+
+    `
+      createMachine({
+        entry: [
+          send('TOGGLE'),
+          respond("GOOD_NAME"),
+          raise('LEGAL_NAME'),
+          sendParent('THE_EVENT'),
+          send({ type: 'MY_EVENT' }),
+        ],
+        states: {
+          idle: {
+            on: {
+              TRIGGER: {
+                actions: send('FINE_NAME')
+              }
+            }
+          }
+        }
+      })
+    `,
   ],
 
   invalid: [
@@ -126,6 +147,78 @@ const tests = {
             BAD_EVENT_NAME: 'busy',
             POOR_NAME_1: 'busy',
             MALFORMED_EVENT_NAME_1: 'busy'
+          }
+        })
+      `,
+    },
+    // event names in send actions
+    {
+      code: `
+        createMachine({
+          entry: [
+            send('badEventName'),
+            respond("poor_name1"),
+            raise('Malformed Event.name1%$#'),
+            sendParent('wrong name!'),
+            send({ type: 'NoGoodName' }),
+          ],
+          states: {
+            idle: {
+              on: {
+                TRIGGER: {
+                  actions: send('fix.this.name')
+                }
+              }
+            }
+          }
+        })
+      `,
+      errors: [
+        {
+          messageId: 'invalidEventName',
+          data: { eventName: 'badEventName', fixedEventName: 'BAD_EVENT_NAME' },
+        },
+        {
+          messageId: 'invalidEventName',
+          data: { eventName: 'poor_name1', fixedEventName: 'POOR_NAME_1' },
+        },
+        {
+          messageId: 'invalidEventName',
+          data: {
+            eventName: 'Malformed Event.name1%$#',
+            fixedEventName: 'MALFORMED_EVENT_NAME_1',
+          },
+        },
+        {
+          messageId: 'invalidEventName',
+          data: { eventName: 'wrong name!', fixedEventName: 'WRONG_NAME' },
+        },
+        {
+          messageId: 'invalidEventName',
+          data: { eventName: 'NoGoodName', fixedEventName: 'NO_GOOD_NAME' },
+        },
+        {
+          messageId: 'invalidEventName',
+          data: { eventName: 'fix.this.name', fixedEventName: 'FIX_THIS_NAME' },
+        },
+      ],
+      output: `
+        createMachine({
+          entry: [
+            send('BAD_EVENT_NAME'),
+            respond("POOR_NAME_1"),
+            raise('MALFORMED_EVENT_NAME_1'),
+            sendParent('WRONG_NAME'),
+            send({ type: 'NO_GOOD_NAME' }),
+          ],
+          states: {
+            idle: {
+              on: {
+                TRIGGER: {
+                  actions: send('FIX_THIS_NAME')
+                }
+              }
+            }
           }
         })
       `,
