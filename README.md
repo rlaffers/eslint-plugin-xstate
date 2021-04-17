@@ -84,7 +84,6 @@ There is also an `all` configuration which includes every available rule. It enf
 
 ## TODO
 
-- add test for no-infinite-loop
 - add an option to restrict some matchers to the scope of state machine declarations
 - detect imperative usage of action creators
 - the onDone transition should not be defined on the root node of the machine
