@@ -209,4 +209,4 @@ const ruleTester = new RuleTester({
     ecmaVersion: 6,
   },
 })
-ruleTester.run('event-names', rule, tests)
+ruleTester.run('no-infnite-loop', rule, tests)
