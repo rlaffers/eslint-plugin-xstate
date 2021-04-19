@@ -19,13 +19,19 @@ const tests = {
               pure(() => {}),
               log('message'),
               escalate('error'),
+              pure(() => send('EVENT')),
             ],
             on: {
               TRIGGER1: {
                 actions: assign({}),
               },
               TRIGGER2: {
-                actions: [assign({}), send(['EVENT']), sendParent('EVENT')],
+                actions: [
+                  assign({}),
+                  send(['EVENT']),
+                  sendParent('EVENT'),
+                  pure(() => send('EVENT')),
+                ],
               },
             },
           },
@@ -42,6 +48,7 @@ const tests = {
             myAction3: sendParent('EVENT'),
             myAction4: respond('EVENT'),
             myAction5: raise('EVENT'),
+            myAction6: pure(() => send('EVENT')),
           },
         }
       )
