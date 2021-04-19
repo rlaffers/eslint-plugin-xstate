@@ -14,6 +14,7 @@ createMachine({
   onDone: {},
 })
 
+// ❌
 createMachine({
   onDone: 'stopped',
 })
