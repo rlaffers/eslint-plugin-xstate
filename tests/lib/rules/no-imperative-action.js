@@ -14,6 +14,11 @@ const tests = {
               sendParent('EVENT'),
               respond('EVENT'),
               raise('EVENT'),
+              forwardTo('someActor'),
+              choose([]),
+              pure(() => {}),
+              log('message'),
+              escalate('error'),
             ],
             on: {
               TRIGGER1: {
@@ -59,6 +64,11 @@ const tests = {
                 () => sendParent('EVENT'),
                 () => respond('EVENT'),
                 () => raise('EVENT'),
+                () => forwardTo('someActor'),
+                () => choose([]),
+                () => pure(() => {}),
+                () => log('message'),
+                () => escalate('error'),
               ],
               on: {
                 TRIGGER1: {
@@ -80,6 +90,11 @@ const tests = {
         })
       `,
       errors: [
+        { messageId: 'imperativeActionCreator' },
+        { messageId: 'imperativeActionCreator' },
+        { messageId: 'imperativeActionCreator' },
+        { messageId: 'imperativeActionCreator' },
+        { messageId: 'imperativeActionCreator' },
         { messageId: 'imperativeActionCreator' },
         { messageId: 'imperativeActionCreator' },
         { messageId: 'imperativeActionCreator' },
