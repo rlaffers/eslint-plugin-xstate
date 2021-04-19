@@ -40,6 +40,7 @@ Then configure the rules you want to use under the rules section.
     "xstate/no-imperative-action": "error",
     "xstate/no-root-ondone": "error",
     "xstate/no-ondone-outside-compound-state": "error",
+    "xstate/invoke-usage": "error",
     "xstate/event-names": "warn",
     "xstate/no-inline-implementation": "warn"
   }
@@ -75,6 +76,7 @@ There is also an `all` configuration which includes every available rule. It enf
 | [no-imperative-action](docs/rules/no-imperative-action.md)                         | Forbid using action creators imperatively                          | :heavy_check_mark: |
 | [no-root-ondone](docs/rules/no-root-ondone.md)                                     | Forbid onDone transitions on root nodes                            | :heavy_check_mark: |
 | [no-ondone-outside-compound-state](docs/rules/no-ondone-outside-compound-state.md) | Forbid onDone transitions on `atomic`, `history` and `final` nodes | :heavy_check_mark: |
+| [invoke-usage](docs/rules/invoke-usage.md)                                         | Enforce correct invocation of services                             | :heavy_check_mark: |
 
 ### Best Practices
 
@@ -90,5 +92,4 @@ There is also an `all` configuration which includes every available rule. It enf
 
 ## TODO
 
-- detect incorrect usage of invoke
 - detect invalid usage of transition declaration for actions (guarded entry/exit actions must be done with `choose`)
