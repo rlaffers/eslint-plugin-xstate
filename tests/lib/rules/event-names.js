@@ -5,30 +5,21 @@ const tests = {
   valid: [
     `
       createMachine({
-        states: {
-          idle: {
-            on: {
-              TOGGLE: 'busy',
-              START_WORK_1: 'busy',
-              'RUN': 'busy',
-              '*': 'busy',
-              // dynamic keys are always valid
-              [eventName]: 'busy'
-            }
-          },
-        }
-      })
-    `,
-    // global transitions
-    `
-      createMachine({
         on: {
           TOGGLE: 'busy',
-          START_WORK_1: 'busy',
-          'RUN': 'busy',
+          START_WORK: 'busy',
+          'MOUSE.CLICK': 'busy',
+          'MY_MOUSE.*': 'busy',
+          [eventName]: 'busy',
           '*': 'busy',
-          [eventName]: 'busy'
-        }
+        },
+        entry: [
+          send('TOGGLE'),
+          respond('START_WORK'),
+          sendParent('MOUSE.CLICK'),
+          raise('MY_MOUSE.SCROLL_DOWN'),
+          send({ type: 'TOGGLE' }),
+        ],
       })
     `,
     // old Machine creator
@@ -36,11 +27,12 @@ const tests = {
       Machine({
         on: {
           TOGGLE: 'busy',
-          START_WORK_1: 'busy',
-          'RUN': 'busy',
+          START_WORK: 'busy',
+          'MOUSE.CLICK': 'busy',
+          'MY_MOUSE.*': 'busy',
+          [eventName]: 'busy',
           '*': 'busy',
-          [eventName]: 'busy'
-        }
+        },
       })
     `,
     // malformed keys outside of machine declaration are not considered event names
@@ -52,27 +44,6 @@ const tests = {
         }
       }
     `,
-
-    `
-      createMachine({
-        entry: [
-          send('TOGGLE'),
-          respond("GOOD_NAME"),
-          raise('LEGAL_NAME'),
-          sendParent('THE_EVENT'),
-          send({ type: 'MY_EVENT' }),
-        ],
-        states: {
-          idle: {
-            on: {
-              TRIGGER: {
-                actions: send('FINE_NAME')
-              }
-            }
-          }
-        }
-      })
-    `,
   ],
 
   invalid: [
@@ -80,148 +51,269 @@ const tests = {
       code: `
         createMachine({
           on: {
-            badEventName: 'busy',
-            poor_name1: 'busy',
-            'Malformed Event.name1%$#': 'busy'
-          }
+            myEvent: 'busy',
+            my_event: 'busy',
+            'My Event': 'busy',
+            'myEvent.*': 'busy',
+          },
+          entry: [
+            send('myEvent'),
+            sendParent('my_event'),
+            respond('My Event'),
+            raise('myEvent.click'),
+            send({ type: 'myEvent' }),
+          ],
         })
       `,
       errors: [
         {
           messageId: 'invalidEventName',
-          data: { eventName: 'badEventName', fixedEventName: 'BAD_EVENT_NAME' },
+          data: { eventName: 'myEvent', fixedEventName: 'MY_EVENT' },
         },
         {
           messageId: 'invalidEventName',
-          data: { eventName: 'poor_name1', fixedEventName: 'POOR_NAME_1' },
+          data: { eventName: 'my_event', fixedEventName: 'MY_EVENT' },
+        },
+        {
+          messageId: 'invalidEventName',
+          data: { eventName: 'My Event', fixedEventName: 'MY_EVENT' },
+        },
+        {
+          messageId: 'invalidEventName',
+          data: { eventName: 'myEvent.*', fixedEventName: 'MY_EVENT.*' },
+        },
+        {
+          messageId: 'invalidEventName',
+          data: { eventName: 'myEvent', fixedEventName: 'MY_EVENT' },
+        },
+        {
+          messageId: 'invalidEventName',
+          data: { eventName: 'my_event', fixedEventName: 'MY_EVENT' },
+        },
+        {
+          messageId: 'invalidEventName',
+          data: { eventName: 'My Event', fixedEventName: 'MY_EVENT' },
         },
         {
           messageId: 'invalidEventName',
           data: {
-            eventName: 'Malformed Event.name1%$#',
-            fixedEventName: 'MALFORMED_EVENT_NAME_1',
+            eventName: 'myEvent.click',
+            fixedEventName: 'MY_EVENT.CLICK',
           },
+        },
+        {
+          messageId: 'invalidEventName',
+          data: { eventName: 'myEvent', fixedEventName: 'MY_EVENT' },
         },
       ],
       output: `
         createMachine({
           on: {
-            BAD_EVENT_NAME: 'busy',
-            POOR_NAME_1: 'busy',
-            MALFORMED_EVENT_NAME_1: 'busy'
-          }
+            MY_EVENT: 'busy',
+            MY_EVENT: 'busy',
+            MY_EVENT: 'busy',
+            'MY_EVENT.*': 'busy',
+          },
+          entry: [
+            send('MY_EVENT'),
+            sendParent('MY_EVENT'),
+            respond('MY_EVENT'),
+            raise('MY_EVENT.CLICK'),
+            send({ type: 'MY_EVENT' }),
+          ],
         })
       `,
     },
-    // old Machine creator
+    // snake_case
     {
       code: `
-        Machine({
+        /* eslint event-names: [ "warn", "snakeCase" ] */
+        createMachine({
           on: {
-            badEventName: 'busy',
-            poor_name1: 'busy',
-            'Malformed Event.name1%$#': 'busy'
-          }
+            myEvent: 'busy',
+            MY_EVENT: 'busy',
+            'My Event': 'busy',
+            'myEvent.*': 'busy',
+          },
+          entry: [
+            send('myEvent'),
+            sendParent('MY_EVENT'),
+            respond('My Event'),
+            raise('myEvent.click'),
+            send({ type: 'myEvent' }),
+          ],
         })
       `,
       errors: [
         {
           messageId: 'invalidEventName',
-          data: { eventName: 'badEventName', fixedEventName: 'BAD_EVENT_NAME' },
+          data: { eventName: 'myEvent', fixedEventName: 'my_event' },
         },
         {
           messageId: 'invalidEventName',
-          data: { eventName: 'poor_name1', fixedEventName: 'POOR_NAME_1' },
+          data: { eventName: 'MY_EVENT', fixedEventName: 'my_event' },
+        },
+        {
+          messageId: 'invalidEventName',
+          data: { eventName: 'My Event', fixedEventName: 'my_event' },
+        },
+        {
+          messageId: 'invalidEventName',
+          data: { eventName: 'myEvent.*', fixedEventName: 'my_event.*' },
+        },
+        {
+          messageId: 'invalidEventName',
+          data: { eventName: 'myEvent', fixedEventName: 'my_event' },
+        },
+        {
+          messageId: 'invalidEventName',
+          data: { eventName: 'MY_EVENT', fixedEventName: 'my_event' },
+        },
+        {
+          messageId: 'invalidEventName',
+          data: { eventName: 'My Event', fixedEventName: 'my_event' },
         },
         {
           messageId: 'invalidEventName',
           data: {
-            eventName: 'Malformed Event.name1%$#',
-            fixedEventName: 'MALFORMED_EVENT_NAME_1',
+            eventName: 'myEvent.click',
+            fixedEventName: 'my_event.click',
           },
+        },
+        {
+          messageId: 'invalidEventName',
+          data: { eventName: 'myEvent', fixedEventName: 'my_event' },
         },
       ],
       output: `
-        Machine({
+        /* eslint event-names: [ "warn", "snakeCase" ] */
+        createMachine({
           on: {
-            BAD_EVENT_NAME: 'busy',
-            POOR_NAME_1: 'busy',
-            MALFORMED_EVENT_NAME_1: 'busy'
-          }
+            my_event: 'busy',
+            my_event: 'busy',
+            my_event: 'busy',
+            'my_event.*': 'busy',
+          },
+          entry: [
+            send('my_event'),
+            sendParent('my_event'),
+            respond('my_event'),
+            raise('my_event.click'),
+            send({ type: 'my_event' }),
+          ],
         })
       `,
     },
-    // event names in send actions
+    // camelCase
+    {
+      code: `
+        /* eslint event-names: [ "warn", "camelCase" ] */
+        createMachine({
+          on: {
+            my_event: 'busy',
+            MY_EVENT: 'busy',
+            'My Event': 'busy',
+            'my_event.*': 'busy',
+          },
+          entry: [
+            send('my_event'),
+            sendParent('MY_EVENT'),
+            respond('My Event'),
+            raise('my_event.click'),
+            send({ type: 'my_event' }),
+          ],
+        })
+      `,
+      errors: [
+        {
+          messageId: 'invalidEventName',
+          data: { eventName: 'my_event', fixedEventName: 'myEvent' },
+        },
+        {
+          messageId: 'invalidEventName',
+          data: { eventName: 'MY_EVENT', fixedEventName: 'myEvent' },
+        },
+        {
+          messageId: 'invalidEventName',
+          data: { eventName: 'My Event', fixedEventName: 'myEvent' },
+        },
+        {
+          messageId: 'invalidEventName',
+          data: { eventName: 'my_event.*', fixedEventName: 'myEvent.*' },
+        },
+        {
+          messageId: 'invalidEventName',
+          data: { eventName: 'my_event', fixedEventName: 'myEvent' },
+        },
+        {
+          messageId: 'invalidEventName',
+          data: { eventName: 'MY_EVENT', fixedEventName: 'myEvent' },
+        },
+        {
+          messageId: 'invalidEventName',
+          data: { eventName: 'My Event', fixedEventName: 'myEvent' },
+        },
+        {
+          messageId: 'invalidEventName',
+          data: {
+            eventName: 'my_event.click',
+            fixedEventName: 'myEvent.click',
+          },
+        },
+        {
+          messageId: 'invalidEventName',
+          data: { eventName: 'my_event', fixedEventName: 'myEvent' },
+        },
+      ],
+      output: `
+        /* eslint event-names: [ "warn", "camelCase" ] */
+        createMachine({
+          on: {
+            myEvent: 'busy',
+            myEvent: 'busy',
+            myEvent: 'busy',
+            'myEvent.*': 'busy',
+          },
+          entry: [
+            send('myEvent'),
+            sendParent('myEvent'),
+            respond('myEvent'),
+            raise('myEvent.click'),
+            send({ type: 'myEvent' }),
+          ],
+        })
+      `,
+    },
+    // sending events with wildcards
     {
       code: `
         createMachine({
           entry: [
-            send('badEventName'),
-            respond("poor_name1"),
-            raise('Malformed Event.name1%$#'),
-            sendParent('wrong name!'),
-            send({ type: 'NoGoodName' }),
+            send('EVENT.*'),
+            sendParent('EVENT.CLICK.*'),
+            respond('*'),
+            raise('EVENT.*'),
+            send({ type: 'EVENT.*' }),
           ],
-          states: {
-            idle: {
-              on: {
-                TRIGGER: {
-                  actions: send('fix.this.name')
-                }
-              }
-            }
-          }
         })
       `,
       errors: [
         {
-          messageId: 'invalidEventName',
-          data: { eventName: 'badEventName', fixedEventName: 'BAD_EVENT_NAME' },
+          messageId: 'invalidSendEventName',
         },
         {
-          messageId: 'invalidEventName',
-          data: { eventName: 'poor_name1', fixedEventName: 'POOR_NAME_1' },
+          messageId: 'invalidSendEventName',
         },
         {
-          messageId: 'invalidEventName',
-          data: {
-            eventName: 'Malformed Event.name1%$#',
-            fixedEventName: 'MALFORMED_EVENT_NAME_1',
-          },
+          messageId: 'invalidSendEventName',
         },
         {
-          messageId: 'invalidEventName',
-          data: { eventName: 'wrong name!', fixedEventName: 'WRONG_NAME' },
+          messageId: 'invalidSendEventName',
         },
         {
-          messageId: 'invalidEventName',
-          data: { eventName: 'NoGoodName', fixedEventName: 'NO_GOOD_NAME' },
-        },
-        {
-          messageId: 'invalidEventName',
-          data: { eventName: 'fix.this.name', fixedEventName: 'FIX_THIS_NAME' },
+          messageId: 'invalidSendEventName',
         },
       ],
-      output: `
-        createMachine({
-          entry: [
-            send('BAD_EVENT_NAME'),
-            respond("POOR_NAME_1"),
-            raise('MALFORMED_EVENT_NAME_1'),
-            sendParent('WRONG_NAME'),
-            send({ type: 'NO_GOOD_NAME' }),
-          ],
-          states: {
-            idle: {
-              on: {
-                TRIGGER: {
-                  actions: send('FIX_THIS_NAME')
-                }
-              }
-            }
-          }
-        })
-      `,
     },
   ],
 }

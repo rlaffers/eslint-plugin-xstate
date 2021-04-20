@@ -42,7 +42,7 @@ Then configure the rules you want to use under the rules section.
     "xstate/no-ondone-outside-compound-state": "error",
     "xstate/invoke-usage": "error",
     "xstate/entry-exit-action": "error",
-    "xstate/event-names": "warn",
+    "xstate/event-names": ["warn", "macroCase"],
     "xstate/no-inline-implementation": "warn"
   }
 }
@@ -88,11 +88,6 @@ There is also an `all` configuration which includes every available rule. It enf
 
 ### Stylistic Issues
 
-| Rule                                     | Description                         | Recommended |
-| ---------------------------------------- | ----------------------------------- | ----------- |
-| [event-names](docs/rules/event-names.md) | Suggest using MACRO_CASE for events |             |
-
-## TODO
-
-- detect invalid usage of transition declaration for actions (guarded entry/exit actions must be done with `choose`)
-- change the event-names rule to be SCXML-compliant
+| Rule                                     | Description                                  | Recommended |
+| ---------------------------------------- | -------------------------------------------- | ----------- |
+| [event-names](docs/rules/event-names.md) | Suggest consistent formatting of event names |             |
