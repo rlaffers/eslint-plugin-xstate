@@ -41,6 +41,7 @@ Then configure the rules you want to use under the rules section.
     "xstate/no-root-ondone": "error",
     "xstate/no-ondone-outside-compound-state": "error",
     "xstate/invoke-usage": "error",
+    "xstate/entry-exit-action": "error",
     "xstate/event-names": "warn",
     "xstate/no-inline-implementation": "warn"
   }
@@ -77,6 +78,7 @@ There is also an `all` configuration which includes every available rule. It enf
 | [no-root-ondone](docs/rules/no-root-ondone.md)                                     | Forbid onDone transitions on root nodes                            | :heavy_check_mark: |
 | [no-ondone-outside-compound-state](docs/rules/no-ondone-outside-compound-state.md) | Forbid onDone transitions on `atomic`, `history` and `final` nodes | :heavy_check_mark: |
 | [invoke-usage](docs/rules/invoke-usage.md)                                         | Enforce correct invocation of services                             | :heavy_check_mark: |
+| [entry-exit-action](docs/rules/entry-exit-action.md)                               | Forbid invalid declarations of entry/exit actions                  | :heavy_check_mark: |
 
 ### Best Practices
 
