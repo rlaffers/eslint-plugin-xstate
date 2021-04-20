@@ -10,7 +10,7 @@ While the XState library neither enforces nor recommends any particular format f
 - snake_case
 - camelCase
 
-The default MACRO*CASE for event names is an \_unofficial* convention, typically used within the XState community.
+The default MACRO_CASE for event names is an _unofficial_ convention, typically used within the XState community.
 
 Examples of **incorrect** code for this rule:
 
