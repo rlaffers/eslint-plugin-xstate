@@ -93,3 +93,4 @@ There is also an `all` configuration which includes every available rule. It enf
 ## TODO
 
 - detect invalid usage of transition declaration for actions (guarded entry/exit actions must be done with `choose`)
+- change the event-names rule to be SCXML-compliant

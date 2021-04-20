@@ -15,8 +15,24 @@ const tests = {
               OFF: {
                 cond: 'myGuard',
                 target: 'inactive',
-                actions: 'myAction',
+                actions: ['myAction1', 'myAction2'],
                 activities: 'myActivity',
+              },
+            },
+          },
+        },
+      })
+    `,
+    // inlined action creators are ok with allowKnownActionCreators=true
+    `
+      /* eslint no-inline-implementation: [ "warn", { "allowKnownActionCreators": true } ] */
+      createMachine({
+        states: {
+          active: {
+            entry: assign(),
+            on: {
+              OFF: {
+                actions: [send('EVENT'), assign()],
               },
             },
           },
@@ -48,10 +64,10 @@ const tests = {
       `,
       errors: [
         { messageId: 'moveServiceToOptions' },
-        { messageId: 'moveActionsToOptions' },
+        { messageId: 'moveActionToOptions' },
         { messageId: 'moveGuardToOptions' },
-        { messageId: 'moveActionsToOptions' },
-        { messageId: 'moveActivitiesToOptions' },
+        { messageId: 'moveActionToOptions' },
+        { messageId: 'moveActivityToOptions' },
       ],
     },
     {
@@ -77,10 +93,10 @@ const tests = {
       `,
       errors: [
         { messageId: 'moveServiceToOptions' },
-        { messageId: 'moveActionsToOptions' },
+        { messageId: 'moveActionToOptions' },
         { messageId: 'moveGuardToOptions' },
-        { messageId: 'moveActionsToOptions' },
-        { messageId: 'moveActivitiesToOptions' },
+        { messageId: 'moveActionToOptions' },
+        { messageId: 'moveActivityToOptions' },
       ],
     },
     {
@@ -95,6 +111,31 @@ const tests = {
       errors: [
         { messageId: 'moveServiceToOptions' },
         { messageId: 'moveServiceToOptions' },
+      ],
+    },
+    // actions arrays with some valid, some invalid items
+    {
+      code: `
+        /* eslint no-inline-implementation: [ "warn", { "allowKnownActionCreators": true } ] */
+        createMachine({
+          states: {
+            active: {
+              entry: ['someAction', assign(), () => {}],
+              on: {
+                OFF: {
+                  actions: ['someAction', someAction, () => {}, send()],
+                  activities: [myActivity, 'myActivity'],
+                },
+              },
+            },
+          },
+        })
+      `,
+      errors: [
+        { messageId: 'moveActionToOptions' },
+        { messageId: 'moveActionToOptions' },
+        { messageId: 'moveActionToOptions' },
+        { messageId: 'moveActivityToOptions' },
       ],
     },
   ],

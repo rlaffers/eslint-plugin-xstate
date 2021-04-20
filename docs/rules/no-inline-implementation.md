@@ -87,4 +87,36 @@ createMachine(
     },
   }
 )
+
+// ✅ inlined action creator calls are ok if allowKnownActionCreators=true
+/* eslint no-inline-implementation: [ "warn", { "allowKnownActionCreators": true } ] */
+createMachine({
+  states: {
+    inactive: {
+      entry: assign({ count: 1 }),
+      on: {
+        TRIGGER: {
+          actions: [assign({ count: 0 }), send('EVENT')], // arrays are ok too
+        },
+      },
+    },
+  },
+})
+```
+
+## Options
+
+| Option                     | Required | Default | Details                                                                                                                                                                                                                                           | Example |
+| -------------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `allowKnownActionCreators` | No       | `false` | Inlined action creators are visualized properly (but still difficult to test, debug and serialize). Setting this option to `true` will turn off the rule for [known action creators](https://xstate.js.org/docs/guides/actions.html) used inline. |         |
+
+## Example
+
+```json
+{
+  "xstate/no-inline-implementation": [
+    "warn",
+    { "allowKnownActionCreators": true }
+  ]
+}
 ```
