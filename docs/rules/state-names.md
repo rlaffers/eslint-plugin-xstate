@@ -28,7 +28,7 @@ createMachine({
 })
 
 // ❌ state names violates the given regex
-/* eslint event-names: [ "warn", "regex", { "regex": "^\\w+:\\w+$" } ] */
+/* eslint event-names: [ "warn", "regex", { "regex": "^\w+:\w+$" } ] */
 createMachine({
   states: {
     PowerOn: {},
@@ -50,7 +50,7 @@ createMachine({
 })
 
 // ✅
-/* eslint event-names: [ "warn", "regex", { "regex": "^\\w+:\\w+$" } ] */
+/* eslint event-names: [ "warn", "regex", { "regex": "^\w+:\w+$" } ] */
 createMachine({
   states: {
     'power:on': {},
@@ -74,6 +74,6 @@ createMachine({
 }
 
 {
-  "xstate/state-names": ["warn", "regex", { "regex": "^[a-z]+$" }]
+  "xstate/state-names": ["warn", "regex", { "regex": "^\\w+:\\w+$" }]
 }
 ```
