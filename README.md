@@ -43,6 +43,7 @@ Then configure the rules you want to use under the rules section.
     "xstate/invoke-usage": "error",
     "xstate/entry-exit-action": "error",
     "xstate/event-names": ["warn", "macroCase"],
+    "xstate/state-names": ["warn", "camelCase"],
     "xstate/no-inline-implementation": "warn"
   }
 }
@@ -91,3 +92,4 @@ There is also an `all` configuration which includes every available rule. It enf
 | Rule                                     | Description                                  | Recommended |
 | ---------------------------------------- | -------------------------------------------- | ----------- |
 | [event-names](docs/rules/event-names.md) | Suggest consistent formatting of event names |             |
+| [state-names](docs/rules/state-names.md) | Suggest consistent formatting of state names |             |
