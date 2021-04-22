@@ -42,6 +42,7 @@ Then configure the rules you want to use under the rules section.
     "xstate/no-ondone-outside-compound-state": "error",
     "xstate/invoke-usage": "error",
     "xstate/entry-exit-action": "error",
+    "xstate/prefer-always": "error",
     "xstate/event-names": ["warn", "macroCase"],
     "xstate/state-names": ["warn", "camelCase"],
     "xstate/no-inline-implementation": "warn"
@@ -83,9 +84,10 @@ There is also an `all` configuration which includes every available rule. It enf
 
 ### Best Practices
 
-| Rule                                                               | Description                                                           | Recommended |
-| ------------------------------------------------------------------ | --------------------------------------------------------------------- | ----------- |
-| [no-inline-implementation](docs/rules/no-inline-implementation.md) | Suggest refactoring guards, actions and services into machine options |             |
+| Rule                                                               | Description                                                             | Recommended        |
+| ------------------------------------------------------------------ | ----------------------------------------------------------------------- | ------------------ |
+| [no-inline-implementation](docs/rules/no-inline-implementation.md) | Suggest refactoring guards, actions and services into machine options   |                    |
+| [prefer-always](docs/rules/prefer-always.md)                       | Suggest using the `always` syntax for transient (eventless) transitions | :heavy_check_mark: |
 
 ### Stylistic Issues
 
