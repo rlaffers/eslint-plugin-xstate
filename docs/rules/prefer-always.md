@@ -4,7 +4,7 @@ Suggest using the new `always` syntax for declaring transient (a.k.a. eventless)
 
 ## Rule Details
 
-XState v4.11+ provides a new `always` syntax for declaring transient transitions, now called eventless transitions. The empty string syntax will be deprecated in v5.
+XState v4.11+ provides a new `always` syntax for declaring [transient transitions](https://xstate.js.org/docs/guides/transitions.html#transient-transitions), now called [eventless transitions](https://xstate.js.org/docs/guides/transitions.html#eventless-always-transitions). The empty string syntax will be deprecated in v5.
 
 Examples of **incorrect** code for this rule:
 
