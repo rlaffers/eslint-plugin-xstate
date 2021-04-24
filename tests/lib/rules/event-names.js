@@ -44,6 +44,15 @@ const tests = {
         }
       }
     `,
+    `
+      /* eslint event-names: [ "warn", "regex", { "regex": "^[a-z]+:[a-z0-9]+$" } ] */
+      createMachine({
+        on: {
+          'power:on': {},
+          'click:1': {},
+        },
+      })
+    `,
   ],
 
   invalid: [
@@ -312,6 +321,27 @@ const tests = {
         },
         {
           messageId: 'invalidSendEventName',
+        },
+      ],
+    },
+    {
+      code: `
+        /* eslint event-names: [ "warn", "regex", { "regex": "^[a-z]+:[a-z0-9]+$" } ] */
+        createMachine({
+          on: {
+            PowerOn: {},
+            power_on: {},
+          },
+        })
+      `,
+      errors: [
+        {
+          messageId: 'eventNameViolatesRegex',
+          data: { eventName: 'PowerOn', regex: '^[a-z]+:[a-z0-9]+$' },
+        },
+        {
+          messageId: 'eventNameViolatesRegex',
+          data: { eventName: 'power_on', regex: '^[a-z]+:[a-z0-9]+$' },
         },
       ],
     },

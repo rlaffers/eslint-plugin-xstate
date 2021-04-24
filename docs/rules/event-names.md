@@ -1,6 +1,6 @@
 # Suggest consistent formatting of event names
 
-Suggest using event names formatted with the preconfigured style (MACRO_CASE, snake_case or camelCase).
+Suggest using event names formatted with the preconfigured style (MACRO_CASE, snake_case, camelCase or regex).
 
 # Rule Details
 
@@ -9,8 +9,9 @@ While the XState library neither enforces nor recommends any particular format f
 - MACRO_CASE (a.k.a. SCREAMING_SNAKE_CASE) [*default*]
 - snake_case
 - camelCase
+- regular expression
 
-The default MACRO_CASE for event names is an _unofficial_ convention, typically used within the XState community.
+The default MACRO*CASE for event names is an \_unofficial* convention, typically used within the XState community.
 
 Examples of **incorrect** code for this rule:
 
@@ -155,14 +156,19 @@ const obj = {
 
 ## Options
 
-| Option   | Required | Default     | Details                                                                               |
-| -------- | -------- | ----------- | ------------------------------------------------------------------------------------- |
-| [string] | No       | `macroCase` | Selects one of the available formatting styles: `macroCase`, `snakeCase`, `camelCase` |
+| Option   | Required | Default     | Details                                                                                        |
+| -------- | -------- | ----------- | ---------------------------------------------------------------------------------------------- |
+| [string] | No       | `macroCase` | Selects one of the available formatting styles: `macroCase`, `snakeCase`, `camelCase`, `regex` |
+| [object] | No       | `undefined` | The second option is an object with properties: `regex` (string)                               |
 
 ## Example
 
 ```json
 {
   "xstate/event-names": ["warn", "camelCase"]
+}
+
+{
+  "xstate/state-names": ["warn", "regex", { "regex": "^\\w+:\\w+$" }]
 }
 ```
