@@ -4,7 +4,7 @@
 
 ## Rule Details
 
-Async functions return a promise which is a truthy value. Therefore, async guard function always pass. A transition guarded by such function will always be taken as if no `cond` was specified.
+Async functions return a promise which is a truthy value. Therefore, async guard functions always pass. Transitions guarded by such functions will always be taken as if no `cond` was specified.
 
 Examples of **incorrect** code for this rule:
 
