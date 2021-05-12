@@ -16,9 +16,9 @@ const tests = {
                 cond: 'myGuard',
                 target: 'inactive',
                 actions: ['myAction1', 'myAction2'],
-                activities: 'myActivity',
               },
             },
+            activities: 'myActivity',
           },
         },
       })
@@ -55,9 +55,9 @@ const tests = {
                   cond: () => {},
                   target: 'inactive',
                   actions: () => {},
-                  activities: () => {},
                 },
               },
+              activities: () => {},
             },
           },
         })
@@ -84,9 +84,9 @@ const tests = {
                   cond: myGuard,
                   target: 'inactive',
                   actions: myAction,
-                  activities: myActivity,
                 },
               },
+              activities: myActivity,
             },
           },
         })
@@ -124,9 +124,9 @@ const tests = {
               on: {
                 OFF: {
                   actions: ['someAction', someAction, () => {}, send()],
-                  activities: [myActivity, 'myActivity'],
                 },
               },
+              activities: [myActivity, 'myActivity'],
             },
           },
         })

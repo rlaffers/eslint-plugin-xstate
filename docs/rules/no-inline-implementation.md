@@ -22,9 +22,9 @@ createMachine({
           target: 'active',
           cond: () => {}, // inlined guard
           actions: () => {}, // inlined action
-          activities: () => {}, // inlined activity
         },
       },
+      activities: () => {}, // inlined activity
     },
   },
 })
@@ -41,9 +41,9 @@ createMachine({
           target: 'active',
           cond: isEnoughFuel, // defined elsewhere
           actions: huffAndPuff, // defined elsewhere
-          activities: beep, // define elsewhere
         },
       },
+      activities: beep, // defined elsewhere
     },
   },
 })
@@ -65,9 +65,9 @@ createMachine(
             target: 'active',
             cond: 'isEnoughFuel',
             actions: ['huffAndPuff', 'log'], // arrays are ok too
-            activities: 'beep',
           },
         },
+        activities: 'beep',
       },
     },
   },
