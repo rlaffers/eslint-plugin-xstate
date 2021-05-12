@@ -99,7 +99,7 @@ There is also an `all` configuration which includes every available rule. It enf
 
 ### Stylistic Issues
 
-| Rule                                     | Description                                  | Recommended |
-| ---------------------------------------- | -------------------------------------------- | ----------- |
-| [event-names](docs/rules/event-names.md) | Suggest consistent formatting of event names |             |
-| [state-names](docs/rules/state-names.md) | Suggest consistent formatting of state names |             |
+| Rule                                     | Description                                                              | Recommended |
+| ---------------------------------------- | ------------------------------------------------------------------------ | ----------- |
+| [event-names](docs/rules/event-names.md) | Suggest consistent formatting of event names                             |             |
+| [state-names](docs/rules/state-names.md) | Suggest consistent formatting of state names and prevent confusing names |             |

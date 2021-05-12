@@ -136,6 +136,38 @@ const tests = {
         },
       ],
     },
+    // special words used as state names
+    {
+      code: `
+        /* eslint state-names: [ "warn", "camelCase" ] */
+        createMachine({
+          states: {
+            src: {},
+            entry: {},
+            'invoke': {},
+            'actions': {},
+          },
+        })
+      `,
+      errors: [
+        {
+          messageId: 'stateNameIsReservedWord',
+          data: { name: 'src' },
+        },
+        {
+          messageId: 'stateNameIsReservedWord',
+          data: { name: 'entry' },
+        },
+        {
+          messageId: 'stateNameIsReservedWord',
+          data: { name: 'invoke' },
+        },
+        {
+          messageId: 'stateNameIsReservedWord',
+          data: { name: 'actions' },
+        },
+      ],
+    },
   ],
 }
 

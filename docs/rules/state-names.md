@@ -1,6 +1,6 @@
 # Suggest consistent formatting of state names
 
-Suggest using state names formatted with the preconfigured style (camelCase, snake_case, PascalCase or regex).
+Suggest using state names formatted with the preconfigured style (camelCase, snake_case, PascalCase or regex). Warn about using special words as state names.
 
 # Rule Details
 
@@ -12,6 +12,30 @@ While the XState library neither enforces nor recommends any particular format f
 - regular expression
 
 The default camelCase for state names is used by the official XState documentation.
+
+Additionally, this rule forbids using certain words with special meaning to XState in some contexts as state names to prevent confusion. The following state names are always considered invalid:
+
+- `actions`
+- `activities`
+- `activities`
+- `after`
+- `always`
+- `cond`
+- `context`
+- `entry`
+- `exit`
+- `id`
+- `in`
+- `initial`
+- `invoke`
+- `meta`
+- `on`
+- `onDone`
+- `onError`
+- `src`
+- `states`
+- `tags`
+- `type`
 
 Examples of **incorrect** code for this rule:
 
@@ -33,6 +57,16 @@ createMachine({
   states: {
     PowerOn: {},
     power_on: {},
+  },
+})
+
+// ❌ special words used as state names
+createMachine({
+  states: {
+    src: {},
+    entry: {},
+    invoke: {},
+    initial: {},
   },
 })
 ```
