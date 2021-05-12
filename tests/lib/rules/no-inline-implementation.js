@@ -39,6 +39,35 @@ const tests = {
         },
       })
     `,
+    // onDone, onError, array of transitions
+    `
+      createMachine({
+        states: {
+          active: {
+            invoke: {
+              src: 'myService',
+              onDone: {
+                cond: 'myGuard',
+                actions: 'myAction1',
+              },
+              onError: {
+                cond: 'myGuard',
+                actions: ['myAction1', 'myAction2'],
+              },
+            },
+            on: {
+              OFF: [
+                {
+                  cond: 'myGuard',
+                  target: 'inactive',
+                  actions: ['myAction1', 'myAction2'],
+                },
+              ],
+            },
+          },
+        },
+      })
+    `,
   ],
   invalid: [
     {
@@ -136,6 +165,58 @@ const tests = {
         { messageId: 'moveActionToOptions' },
         { messageId: 'moveActionToOptions' },
         { messageId: 'moveActivityToOptions' },
+      ],
+    },
+    // inline implementations inside array of transitions
+    {
+      code: `
+        createMachine({
+          states: {
+            active: {
+              on: {
+                OFF: [{
+                  cond: () => {},
+                  target: 'inactive',
+                  actions: [someAction, () => {}],
+                }],
+              },
+            },
+          },
+        })
+      `,
+      errors: [
+        { messageId: 'moveGuardToOptions' },
+        { messageId: 'moveActionToOptions' },
+        { messageId: 'moveActionToOptions' },
+      ],
+    },
+    // inline implementations inside onDone, onError transitions
+    {
+      code: `
+        createMachine({
+          states: {
+            active: {
+              invoke: {
+                src: 'myService',
+                onDone: {
+                  cond: myGuard,
+                  actions: () => {},
+                },
+                onError: {
+                  cond: () => {},
+                  actions: [myAction, () => {}],
+                },
+              },
+            },
+          },
+        })
+      `,
+      errors: [
+        { messageId: 'moveGuardToOptions' },
+        { messageId: 'moveActionToOptions' },
+        { messageId: 'moveGuardToOptions' },
+        { messageId: 'moveActionToOptions' },
+        { messageId: 'moveActionToOptions' },
       ],
     },
   ],
