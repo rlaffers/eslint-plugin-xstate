@@ -1,6 +1,7 @@
 const RuleTester = require('eslint').RuleTester
 const rule = require('../../../lib/rules/no-imperative-action')
 
+// TODO detect actions.* as action creators
 const tests = {
   valid: [
     `
@@ -20,6 +21,7 @@ const tests = {
               log('message'),
               escalate('error'),
               pure(() => send('EVENT')),
+              actions.pure(() => send('EVENT')),
             ],
             on: {
               TRIGGER1: {
@@ -31,6 +33,7 @@ const tests = {
                   send(['EVENT']),
                   sendParent('EVENT'),
                   pure(() => send('EVENT')),
+                  actions.pure(() => send('EVENT')),
                 ],
               },
             },
@@ -49,6 +52,7 @@ const tests = {
             myAction4: respond('EVENT'),
             myAction5: raise('EVENT'),
             myAction6: pure(() => send('EVENT')),
+            myAction6: actions.pure(() => send('EVENT')),
           },
         }
       )
