@@ -6,6 +6,18 @@ Forbid unrecognized properties in state nodes.
 
 State node declarations should not contain properties which are not recognized by XState.
 
+Furthermore, certain recognized properties are valid only within specific contexts:
+
+- The `onDone` transitions cannot be defined on the root state node. This is because `onDone` is a transition on a `'done.state.*'` event, and when a machine reaches its final state, it can no longer accept any event.
+- The `context` property can be defined only on the root state node.
+- The `initial` property can be defined only on a compound state node. A state node is considered compound when it has `type: 'compound'` or it has no `type` prop and contains a `states` prop.
+- The `history` and `target` properties are valid only within a history state node.
+
+Certain properties permit specific values only:
+
+- `type` can be one of: "atomic", "compound", "parallel", "history", "final".
+- `history` can be one of: "shallow", "deep".
+
 Examples of **incorrect** code for this rule:
 
 ```javascript

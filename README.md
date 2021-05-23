@@ -38,7 +38,6 @@ Then configure the rules you want to use under the rules section.
     "xstate/spawn-usage": "error",
     "xstate/no-infinite-loop": "error",
     "xstate/no-imperative-action": "error",
-    "xstate/no-root-ondone": "error",
     "xstate/no-ondone-outside-compound-state": "error",
     "xstate/invoke-usage": "error",
     "xstate/entry-exit-action": "error",
@@ -82,7 +81,6 @@ There is also an `all` configuration which includes every available rule. It enf
 | [spawn-usage](docs/rules/spawn-usage.md)                                           | Enforce correct usage of `spawn`                                   | :heavy_check_mark: |
 | [no-infinite-loop](docs/rules/no-infinite-loop.md)                                 | Detect infinite loops with eventless transitions                   | :heavy_check_mark: |
 | [no-imperative-action](docs/rules/no-imperative-action.md)                         | Forbid using action creators imperatively                          | :heavy_check_mark: |
-| [no-root-ondone](docs/rules/no-root-ondone.md)                                     | Forbid onDone transitions on root nodes                            | :heavy_check_mark: |
 | [no-ondone-outside-compound-state](docs/rules/no-ondone-outside-compound-state.md) | Forbid onDone transitions on `atomic`, `history` and `final` nodes | :heavy_check_mark: |
 | [invoke-usage](docs/rules/invoke-usage.md)                                         | Enforce correct invocation of services                             | :heavy_check_mark: |
 | [entry-exit-action](docs/rules/entry-exit-action.md)                               | Forbid invalid declarations of entry/exit actions                  | :heavy_check_mark: |
