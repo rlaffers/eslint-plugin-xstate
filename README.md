@@ -45,6 +45,7 @@ Then configure the rules you want to use under the rules section.
     "xstate/prefer-always": "error",
     "xstate/no-misplaced-on-transition": "error",
     "xstate/no-invalid-transition-props": "error",
+    "xstate/no-invalid-state-props": "error",
     "xstate/no-async-guard": "error",
     "xstate/event-names": ["warn", "macroCase"],
     "xstate/state-names": ["warn", "camelCase"],
@@ -87,6 +88,7 @@ There is also an `all` configuration which includes every available rule. It enf
 | [entry-exit-action](docs/rules/entry-exit-action.md)                               | Forbid invalid declarations of entry/exit actions                  | :heavy_check_mark: |
 | [no-misplaced-on-transition](docs/rules/no-misplaced-on-transition.md)             | Forbid invalid declarations of `on` transitions                    | :heavy_check_mark: |
 | [no-invalid-transition-props](docs/rules/no-invalid-transition-props.md)           | Forbid invalid properties in transition declarations               | :heavy_check_mark: |
+| [no-invalid-state-props](docs/rules/no-invalid-state-props.md)                     | Forbid invalid properties in state node declarations               | :heavy_check_mark: |
 | [no-async-guard](docs/rules/no-async-guard.md)                                     | Forbid asynchronous guard functions                                | :heavy_check_mark: |
 
 ### Best Practices
