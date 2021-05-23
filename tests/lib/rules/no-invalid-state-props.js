@@ -18,6 +18,7 @@ const tests = {
             onDone: {},
             on: {},
             tags: ['off'],
+            invoke: { src: 'someService' },
           },
           busy: {
             type: 'compound',
