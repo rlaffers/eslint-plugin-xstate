@@ -62,6 +62,7 @@ Examples of **correct** code for this rule:
 // ✅ all state props are valid
 createMachine({
   context: {}, // valid in the root node
+  initial: 'idle'
   states: {
     idle: {
       type: 'parallel',
