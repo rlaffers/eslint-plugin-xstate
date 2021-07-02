@@ -7,6 +7,7 @@ const tests = {
       createMachine({
         context: {}, // valid in the root node
         initial: 'idle',
+        strict: true,
         states: {
           idle: {
             type: 'parallel',
@@ -36,6 +37,10 @@ const tests = {
               },
               writing: {},
             },
+          },
+          done: {
+            type: 'final',
+            data: {},
           },
         },
       })
