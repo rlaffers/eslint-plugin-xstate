@@ -39,6 +39,26 @@ const tests = {
         },
       })
     `,
+    `
+      createMachine({
+        initial: 'active',
+        states: {
+          active: {
+            invoke: [
+              {
+                src: () => [],
+              },
+              {
+                src: 'someService',
+              },
+              {
+                src: someService,
+              },
+            ],
+          },
+        },
+      })
+    `,
   ],
   invalid: [
     {
@@ -61,6 +81,33 @@ const tests = {
               invoke: {
                 src: true,
               },
+            },
+          },
+        })
+      `,
+      errors: [
+        { messageId: 'invokeIsNotObject' },
+        { messageId: 'invokeIsNotObject' },
+        { messageId: 'invokeObjectLacksSrc' },
+        { messageId: 'srcPropertyIsInvalid' },
+      ],
+    },
+    {
+      code: `
+        createMachine({
+          initial: 'active',
+          states: {
+            active: {
+              invoke: [
+                () => {},
+                'someService',
+                {
+                  onDone: 'stopped',
+                },
+                {
+                  src: true,
+                }
+              ]
             },
           },
         })
