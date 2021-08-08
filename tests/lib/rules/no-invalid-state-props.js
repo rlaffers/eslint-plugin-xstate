@@ -8,6 +8,7 @@ const tests = {
         context: {}, // valid in the root node
         initial: 'idle',
         strict: true,
+        preserveActionOrder: true,
         states: {
           idle: {
             type: 'parallel',
