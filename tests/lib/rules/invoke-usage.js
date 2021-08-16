@@ -44,6 +44,18 @@ const tests = {
         initial: 'active',
         states: {
           active: {
+            invoke: {
+              src: someMachineCreator(),
+            },
+          },
+        },
+      })
+    `,
+    `
+      createMachine({
+        initial: 'active',
+        states: {
+          active: {
             invoke: [
               {
                 src: () => [],
