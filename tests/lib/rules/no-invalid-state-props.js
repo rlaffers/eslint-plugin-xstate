@@ -9,6 +9,7 @@ const tests = {
         initial: 'idle',
         strict: true,
         preserveActionOrder: true,
+        description: 'This is my root node',
         states: {
           idle: {
             type: 'parallel',
@@ -21,6 +22,7 @@ const tests = {
             on: {},
             tags: ['off'],
             invoke: { src: 'someService' },
+            description: 'this is an idle state'
           },
           busy: {
             type: 'compound',
