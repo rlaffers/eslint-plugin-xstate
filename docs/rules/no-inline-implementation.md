@@ -15,18 +15,18 @@ createMachine({
   states: {
     inactive: {
       invoke: {
-        src: () => Promise.resolve(42), // inlined service
+        src: () => Promise.resolve(42) // inlined service
       },
       on: {
         TRIGGER: {
           target: 'active',
           cond: () => {}, // inlined guard
-          actions: () => {}, // inlined action
-        },
+          actions: () => {} // inlined action
+        }
       },
-      activities: () => {}, // inlined activity
-    },
-  },
+      activities: () => {} // inlined activity
+    }
+  }
 })
 
 // ❌ using variable references is not recommended for the same reasons
@@ -34,18 +34,18 @@ createMachine({
   states: {
     inactive: {
       invoke: {
-        src: someMachine, // defined elsewhere
+        src: someMachine // defined elsewhere
       },
       on: {
         TRIGGER: {
           target: 'active',
           cond: isEnoughFuel, // defined elsewhere
-          actions: huffAndPuff, // defined elsewhere
-        },
+          actions: huffAndPuff // defined elsewhere
+        }
       },
-      activities: beep, // defined elsewhere
-    },
-  },
+      activities: beep // defined elsewhere
+    }
+  }
 })
 ```
 
@@ -58,33 +58,33 @@ createMachine(
     states: {
       inactive: {
         invoke: {
-          src: 'someMachine',
+          src: 'someMachine'
         },
         on: {
           TRIGGER: {
             target: 'active',
             cond: 'isEnoughFuel',
-            actions: ['huffAndPuff', 'log'], // arrays are ok too
-          },
+            actions: ['huffAndPuff', 'log'] // arrays are ok too
+          }
         },
-        activities: 'beep',
-      },
-    },
+        activities: 'beep'
+      }
+    }
   },
   {
     services: {
-      someMachine: () => {},
+      someMachine: () => {}
     },
     guards: {
-      isEnoughFuel: () => true,
+      isEnoughFuel: () => true
     },
     actions: {
       huffAndPuff: () => {},
-      log: () => {},
+      log: () => {}
     },
     activities: {
-      beep: () => {},
-    },
+      beep: () => {}
+    }
   }
 )
 
@@ -96,11 +96,26 @@ createMachine({
       entry: assign({ count: 1 }),
       on: {
         TRIGGER: {
-          actions: [assign({ count: 0 }), send('EVENT')], // arrays are ok too
-        },
-      },
-    },
-  },
+          actions: [assign({ count: 0 }), send('EVENT')] // arrays are ok too
+        }
+      }
+    }
+  }
+})
+
+// ✅ inlined guard creator calls are ok if guardCreatorRegex is set
+/* eslint no-inline-implementation: [ "warn", { "guardCreatorRegex": "and|or|not" } ] */
+createMachine({
+  states: {
+    inactive: {
+      on: {
+        BUTTON_CLICKED: {
+          cond: and(['isStartButton', 'isReady'])
+          target: 'active'
+        }
+      }
+    }
+  }
 })
 ```
 
@@ -109,6 +124,7 @@ createMachine({
 | Option                     | Required | Default | Details                                                                                                                                                                                                                                           |
 | -------------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `allowKnownActionCreators` | No       | `false` | Inlined action creators are visualized properly (but still difficult to test, debug and serialize). Setting this option to `true` will turn off the rule for [known action creators](https://xstate.js.org/docs/guides/actions.html) used inline. |
+| `guardCreatorRegex`        | No       | `''`    | Use a regular expression to allow custom guard creators.                                                                                                                                                                                          |
 
 ## Example
 
@@ -117,6 +133,13 @@ createMachine({
   "xstate/no-inline-implementation": [
     "warn",
     { "allowKnownActionCreators": true }
+  ]
+}
+
+{
+  "xstate/no-inline-implementation": [
+    "warn",
+    { "guardCreatorRegex": "and|or|not" }
   ]
 }
 ```
