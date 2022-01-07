@@ -103,8 +103,8 @@ createMachine({
   }
 })
 
-// ✅ inlined guard creator calls are ok if guardCreatorRegex is set
-/* eslint no-inline-implementation: [ "warn", { "guardCreatorRegex": "and|or|not" } ] */
+// ✅ inlined guard creator calls are ok if they match guardCreatorRegex
+/* eslint no-inline-implementation: [ "warn", { "guardCreatorRegex": "^(and|or|not)$" } ] */
 createMachine({
   states: {
     inactive: {
@@ -112,6 +112,21 @@ createMachine({
         BUTTON_CLICKED: {
           cond: and(['isStartButton', 'isReady'])
           target: 'active'
+        }
+      }
+    }
+  }
+})
+
+// ✅ inlined guard creator calls are ok if they match actionCreatorRegex
+/* eslint no-inline-implementation: [ "warn", { "actionCreatorRegex": "^customAction$" } ] */
+createMachine({
+  states: {
+    inactive: {
+      on: {
+        BUTTON_CLICKED: {
+          target: 'active'
+          actions: customAction(),
         }
       }
     }
@@ -125,6 +140,7 @@ createMachine({
 | -------------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `allowKnownActionCreators` | No       | `false` | Inlined action creators are visualized properly (but still difficult to test, debug and serialize). Setting this option to `true` will turn off the rule for [known action creators](https://xstate.js.org/docs/guides/actions.html) used inline. |
 | `guardCreatorRegex`        | No       | `''`    | Use a regular expression to allow custom guard creators.                                                                                                                                                                                          |
+| `actionCreatorRegex`       | No       | `''`    | Use a regular expression to allow custom action creators.                                                                                                                                                                                         |
 
 ## Example
 
@@ -139,7 +155,14 @@ createMachine({
 {
   "xstate/no-inline-implementation": [
     "warn",
-    { "guardCreatorRegex": "and|or|not" }
+    { "guardCreatorRegex": "^(and|or|not)$" }
+  ]
+}
+
+{
+  "xstate/no-inline-implementation": [
+    "warn",
+    { "actionCreatorRegex": "^customAction$" }
   ]
 }
 ```

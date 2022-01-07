@@ -83,6 +83,22 @@ const tests = {
           },
         },
       })
+    `,
+    // inlined action creators are ok if they match actionCreatorRegex
+    `
+      /* eslint no-inline-implementation: [ "warn", { "actionCreatorRegex": "^customAction$" } ] */
+      createMachine({
+        states: {
+          active: {
+            on: {
+              OFF: {
+                target: 'inactive',
+                actions: customAction(),
+              },
+            },
+          },
+        },
+      })
     `
   ],
   invalid: [
