@@ -99,6 +99,20 @@ const tests = {
           },
         },
       })
+    `,
+    // inlined service creators are ok if they match serviceCreatorRegex
+    `
+      /* eslint no-inline-implementation: [ "warn", { "serviceCreatorRegex": "^customService$" } ] */
+      createMachine({
+        states: {
+          active: {
+            invoke: {
+              src: customService(),
+            },
+            activities: customService(),
+          },
+        },
+      })
     `
   ],
   invalid: [

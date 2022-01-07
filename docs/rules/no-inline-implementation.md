@@ -132,6 +132,18 @@ createMachine({
     }
   }
 })
+
+// ✅ inlined service creator calls are ok if they match serviceCreatorRegex
+/* eslint no-inline-implementation: [ "warn", { "serviceCreatorRegex": "^customService$" } ] */
+createMachine({
+  states: {
+    inactive: {
+      invoke: {
+        src: createService()
+      }
+    }
+  }
+})
 ```
 
 ## Options
@@ -141,6 +153,7 @@ createMachine({
 | `allowKnownActionCreators` | No       | `false` | Inlined action creators are visualized properly (but still difficult to test, debug and serialize). Setting this option to `true` will turn off the rule for [known action creators](https://xstate.js.org/docs/guides/actions.html) used inline. |
 | `guardCreatorRegex`        | No       | `''`    | Use a regular expression to allow custom guard creators.                                                                                                                                                                                          |
 | `actionCreatorRegex`       | No       | `''`    | Use a regular expression to allow custom action creators.                                                                                                                                                                                         |
+| `serviceCreatorRegex`      | No       | `''`    | Use a regular expression to allow custom service creators.                                                                                                                                                                                        |
 
 ## Example
 
@@ -163,6 +176,13 @@ createMachine({
   "xstate/no-inline-implementation": [
     "warn",
     { "actionCreatorRegex": "^customAction$" }
+  ]
+}
+
+{
+  "xstate/no-inline-implementation": [
+    "warn",
+    { "serviceCreatorRegex": "^customService$" }
   ]
 }
 ```
