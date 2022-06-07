@@ -34,7 +34,7 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.0.0",
-    "husky": "^6.0.0",
+    "husky": "^8.0.1",
     "jest": "^28.1.1",
     "prettier": "^2.6.2",
     "semantic-release": "^17.4.2"
