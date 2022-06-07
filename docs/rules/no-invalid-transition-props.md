@@ -72,6 +72,7 @@ createMachine({
           actions: [],
           in: 'otherState.ready',
           internal: false,
+          description: 'some text',
         },
       },
     },

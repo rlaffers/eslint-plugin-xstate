@@ -14,6 +14,7 @@ const tests = {
                 actions: [],
                 in: 'otherState.ready',
                 internal: false,
+                description: 'some text',
               },
             },
           },
@@ -37,14 +38,17 @@ const tests = {
                 actions: [],
                 in: 'otherState.ready',
                 internal: false,
+                description: 'some text',
               },
               onError: [
                 {
                   cond: () => false,
                   target: 'failed',
+                  description: 'some text',
                 },
                 {
                   target: 'failed',
+                  description: 'some text',
                 },
               ],
             },
