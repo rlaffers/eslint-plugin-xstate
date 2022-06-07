@@ -10,6 +10,10 @@ const tests = {
         strict: true,
         preserveActionOrder: true,
         description: 'This is my root node',
+        schema: {
+          context: {},
+          events: {},
+        },
         states: {
           idle: {
             type: 'parallel',
