@@ -113,7 +113,7 @@ const tests = {
           },
         },
       })
-    `
+    `,
   ],
   invalid: [
     {
@@ -142,8 +142,8 @@ const tests = {
         { messageId: 'moveActionToOptions' },
         { messageId: 'moveGuardToOptions' },
         { messageId: 'moveActionToOptions' },
-        { messageId: 'moveActivityToOptions' }
-      ]
+        { messageId: 'moveActivityToOptions' },
+      ],
     },
     {
       code: `
@@ -171,8 +171,8 @@ const tests = {
         { messageId: 'moveActionToOptions' },
         { messageId: 'moveGuardToOptions' },
         { messageId: 'moveActionToOptions' },
-        { messageId: 'moveActivityToOptions' }
-      ]
+        { messageId: 'moveActivityToOptions' },
+      ],
     },
     {
       code: `
@@ -185,8 +185,8 @@ const tests = {
       `,
       errors: [
         { messageId: 'moveServiceToOptions' },
-        { messageId: 'moveServiceToOptions' }
-      ]
+        { messageId: 'moveServiceToOptions' },
+      ],
     },
     // actions arrays with some valid, some invalid items
     {
@@ -210,8 +210,8 @@ const tests = {
         { messageId: 'moveActionToOptions' },
         { messageId: 'moveActionToOptions' },
         { messageId: 'moveActionToOptions' },
-        { messageId: 'moveActivityToOptions' }
-      ]
+        { messageId: 'moveActivityToOptions' },
+      ],
     },
     // inline implementations inside array of transitions
     {
@@ -233,8 +233,8 @@ const tests = {
       errors: [
         { messageId: 'moveGuardToOptions' },
         { messageId: 'moveActionToOptions' },
-        { messageId: 'moveActionToOptions' }
-      ]
+        { messageId: 'moveActionToOptions' },
+      ],
     },
     // inline implementations inside onDone, onError transitions
     {
@@ -262,15 +262,15 @@ const tests = {
         { messageId: 'moveActionToOptions' },
         { messageId: 'moveGuardToOptions' },
         { messageId: 'moveActionToOptions' },
-        { messageId: 'moveActionToOptions' }
-      ]
-    }
-  ]
+        { messageId: 'moveActionToOptions' },
+      ],
+    },
+  ],
 }
 
 const ruleTester = new RuleTester({
   parserOptions: {
-    ecmaVersion: 6
-  }
+    ecmaVersion: 6,
+  },
 })
 ruleTester.run('no-inline-implementation', rule, tests)
