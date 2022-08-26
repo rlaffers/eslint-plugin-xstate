@@ -14,6 +14,7 @@ const tests = {
           context: {},
           events: {},
         },
+        tsTypes: {},
         states: {
           idle: {
             type: 'parallel',
