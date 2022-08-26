@@ -29,6 +29,32 @@ const tests = {
         },
       })
     `,
+    `
+      createMachine({
+        id: 'root',
+        states: {
+          powerOn: {
+            on: {
+              EVENT1: 'powerOff',
+              EVENT2: {
+                target: 'powerOff',
+              },
+              EVENT3: '#root.powerOff',
+              EVENT4: '.highPower',
+            },
+          },
+          powerOff: {
+            invoke: {
+              src: 'myService',
+              onDone: 'powerOff',
+              onError: {
+                target: 'powerOff',
+              },
+            },
+          },
+        },
+      })
+    `,
   ],
 
   invalid: [
@@ -167,6 +193,89 @@ const tests = {
           data: { name: 'actions' },
         },
       ],
+    },
+    // validate state names in target positions
+    {
+      code: `
+        /* eslint state-names: [ "warn", "camelCase" ] */
+        createMachine({
+          id: 'root',
+          states: {
+            powerOn: {
+              on: {
+                EVENT1: 'PowerOff',
+                EVENT2: {
+                  target: 'power_off',
+                },
+                EVENT3: '#root.power_off',
+                EVENT4: '.HIGH_POWER',
+              },
+            },
+            powerOff: {
+              invoke: {
+                src: 'myService',
+                onDone: 'power off',
+                onError: {
+                  target: 'POWER:OFF',
+                },
+              },
+            },
+          },
+        })
+      `,
+      errors: [
+        {
+          messageId: 'invalidStateName',
+          data: { name: 'PowerOff', fixedName: 'powerOff' },
+        },
+        {
+          messageId: 'invalidStateName',
+          data: { name: 'power_off', fixedName: 'powerOff' },
+        },
+        {
+          messageId: 'invalidStateName',
+          data: { name: '#root.power_off', fixedName: '#root.powerOff' },
+        },
+        {
+          messageId: 'invalidStateName',
+          data: { name: '.HIGH_POWER', fixedName: '.highPower' },
+        },
+        {
+          messageId: 'invalidStateName',
+          data: { name: 'power off', fixedName: 'powerOff' },
+        },
+        {
+          messageId: 'invalidStateName',
+          data: { name: 'POWER:OFF', fixedName: 'powerOff' },
+        },
+      ],
+      output: `
+        /* eslint state-names: [ "warn", "camelCase" ] */
+        createMachine({
+          id: 'root',
+          states: {
+            powerOn: {
+              on: {
+                EVENT1: 'powerOff',
+                EVENT2: {
+                  target: 'powerOff',
+                },
+                EVENT3: '#root.powerOff',
+                EVENT4: '.highPower',
+              },
+            },
+            powerOff: {
+              invoke: {
+                src: 'myService',
+                onDone: 'powerOff',
+                onError: {
+                  target: 'powerOff',
+                },
+              },
+            },
+          },
+        })
+      `,
     },
   ],
 }
