@@ -6,6 +6,7 @@ CONTRIBUTING.md
 .prettierrc
 .eslintrc.json
 .git
+.github
 .gitignore
 .npmignore
 commitlint.config.js
