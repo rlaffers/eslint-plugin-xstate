@@ -9,6 +9,7 @@ const tests = {
         initial: 'idle',
         strict: true,
         preserveActionOrder: true,
+        predictableActionArguments: true,
         description: 'This is my root node',
         schema: {
           context: {},
