@@ -73,6 +73,9 @@ Examples of **correct** code for this rule:
 ```javascript
 // ✅ all state props are valid
 createMachine({
+  id: 'root',
+  description: 'this is the main machine',
+  predictableActionArguments: true,
   context: {}, // valid in the root node
   initial: 'idle'
   states: {
