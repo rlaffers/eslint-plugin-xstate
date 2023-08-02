@@ -1,6 +1,6 @@
 # Enforce proper usage of the spawn function
 
-Ensure that the `spawn` function is used correctly.
+Ensure that the `spawn` function imported from xstate is used correctly.
 
 ## Rule Details
 
@@ -9,6 +9,8 @@ The `spawn` function has to be used in the context of an assignment function. Fa
 Examples of **incorrect** code for this rule:
 
 ```javascript
+import { spawn } from 'xstate'
+
 // ❌ spawn called outside of a state machine
 const someActorRef = spawn(someMachine)
 
@@ -29,6 +31,8 @@ const someActorRef = spawn(someMachine)
 Examples of **correct** code for this rule:
 
 ```javascript
+import { spawn } from 'xstate'
+
 // ✅ spawn called lazily inside an object assigner
 {
   actions: assign({
