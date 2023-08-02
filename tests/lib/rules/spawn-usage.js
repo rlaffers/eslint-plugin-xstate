@@ -87,6 +87,7 @@ const tests = {
         ref1: () => spawn(x),
         ref2: () => foo(x),
         ref3: () => xs.spawn(x),
+        ref4: () => xs['spawn'](x),
       })
     `,
     `
@@ -98,6 +99,7 @@ const tests = {
         ref1: () => spawn(x),
         ref2: () => foo(x),
         ref3: () => xs.spawn(x),
+        ref4: () => xs['spawn'](x),
       })
     `,
   ],
@@ -147,12 +149,15 @@ const tests = {
         import xs from 'xstate'
         const { spawn } = xs
         const foo = xs.spawn
+        const boo = xs['spawn']
 
         spawn()
         foo(x)
+        boo(x)
         xs.spawn(x)
       `,
       errors: [
+        { messageId: 'invalidCallContext' },
         { messageId: 'invalidCallContext' },
         { messageId: 'invalidCallContext' },
         { messageId: 'invalidCallContext' },
@@ -163,16 +168,47 @@ const tests = {
         import * as xs from 'xstate'
         const { spawn } = xs
         const foo = xs.spawn
+        const boo = xs['spawn']
 
         spawn()
         foo(x)
+        boo()
         xs.spawn(x)
       `,
       errors: [
         { messageId: 'invalidCallContext' },
         { messageId: 'invalidCallContext' },
         { messageId: 'invalidCallContext' },
+        { messageId: 'invalidCallContext' },
       ],
+    },
+    {
+      code: `
+        const { spawn } = require('xstate')
+        spawn(x)
+      `,
+      errors: [{ messageId: 'invalidCallContext' }],
+    },
+    {
+      code: `
+        const spawn = require('xstate').spawn
+        spawn(x)
+      `,
+      errors: [{ messageId: 'invalidCallContext' }],
+    },
+    {
+      code: `
+        const spawn = require('xstate')['spawn']
+        spawn(x)
+      `,
+      errors: [{ messageId: 'invalidCallContext' }],
+    },
+    {
+      code: `
+        const xs = require('xstate')
+        xs.spawn(x)
+      `,
+      errors: [{ messageId: 'invalidCallContext' }],
     },
     // {
     //   code: `
