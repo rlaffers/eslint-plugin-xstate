@@ -16,6 +16,8 @@ const tests = {
           events: {},
         },
         tsTypes: {},
+        entry: 'log',
+        exit: 'log',
         states: {
           idle: {
             type: 'parallel',
@@ -111,7 +113,6 @@ const tests = {
     {
       code: `
         createMachine({
-          exit: 'someAction',
           onDone: 'idle',
           states: {
             idle: {},
@@ -119,7 +120,6 @@ const tests = {
         })
       `,
       errors: [
-        { messageId: 'invalidRootStateProperty', data: { propName: 'exit' } },
         { messageId: 'invalidRootStateProperty', data: { propName: 'onDone' } },
       ],
     },
