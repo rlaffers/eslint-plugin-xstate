@@ -33,8 +33,47 @@ const tests = {
         },
       })
     `,
+    `
+      createMachine({
+        initial: 'loading',
+        states: {
+          loading: {
+            invoke: {
+              src: 'fetchData',
+              onDone: 'ready',
+            },
+          },
+        },
+      })
+    `,
+    `
+      createMachine({
+        initial: 'loading',
+        states: {
+          loading: {
+            invoke: [{
+              src: 'fetchData',
+              onDone: 'ready',
+            }],
+          },
+        },
+      })
+    `,
   ],
   invalid: [
+    {
+      code: `
+        createMachine({
+          states: {
+            active: {
+              type: 'atomic',
+              onDone: 'idle',
+            },
+          },
+        })
+      `,
+      errors: [{ messageId: 'onDoneOnAtomicStateForbidden' }],
+    },
     {
       code: `
         createMachine({
@@ -45,7 +84,7 @@ const tests = {
           },
         })
       `,
-      errors: [{ messageId: 'onDoneOnAtomicStateForbidden' }],
+      errors: [{ messageId: 'onDoneUsedIncorrectly' }],
     },
     {
       code: `
@@ -74,6 +113,16 @@ const tests = {
         })
       `,
       errors: [{ messageId: 'onDoneOnHistoryStateForbidden' }],
+    },
+    {
+      code: `
+        createMachine({
+          on: {
+            onDone: 'idle',
+          },
+        })
+      `,
+      errors: [{ messageId: 'onDoneUsedIncorrectly' }],
     },
   ],
 }

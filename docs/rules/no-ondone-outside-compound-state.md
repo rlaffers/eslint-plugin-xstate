@@ -71,6 +71,36 @@ createMachine({
     },
   },
 })
+
+// ✅ onDone transition inside an invoke block
+createMachine({
+  states: {
+    active: {
+      invoke: {
+        src: 'fetchSomething',
+        onDone: 'idle',
+      },
+    },
+  },
+})
+
+// ✅ onDone transition inside an array of invoke blocks
+createMachine({
+  states: {
+    active: {
+      invoke: [
+        {
+          src: 'fetchSomething',
+          onDone: 'done',
+        },
+        {
+          src: 'listen',
+          onDone: 'done',
+        },
+      ],
+    },
+  },
+})
 ```
 
 ## Further Reading
