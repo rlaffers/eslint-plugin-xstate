@@ -6,6 +6,14 @@ Forbid unrecognized properties in `on`, `onDone` and `onError` transition declar
 
 Transition declarations should not contain properties which are not recognized by XState.
 
+### XState v5
+
+In XState v5, the following transition properties are no longer valid:
+
+- `cond`: removed in favor of `guard`
+- `in`: removed in favor of the `stateIn` guard
+- `internal`: removed in favor of `reenter`
+
 Examples of **incorrect** code for this rule:
 
 ```javascript
@@ -61,7 +69,7 @@ createMachine({
 Examples of **correct** code for this rule:
 
 ```javascript
-// ✅ only recognized properties inside transitions
+// ✅ only recognized properties inside transitions (XState v4)
 createMachine({
   states: {
     idle: {
@@ -73,6 +81,28 @@ createMachine({
           in: 'otherState.ready',
           internal: false,
           description: 'some text',
+        },
+      },
+    },
+  },
+})
+
+// ✅ only recognized properties inside transitions (XState v5)
+createMachine({
+  states: {
+    idle: {
+      on: {
+        EVENT: {
+          guard: () => true,
+          target: 'active',
+          actions: [],
+          reenter: true,
+          description: 'some text',
+        },
+        OTHER_EVENT: {
+          // "stateIn" instead of the "in" guard
+          guard: stateIn('otherState.ready'),
+          target: 'active',
         },
       },
     },
