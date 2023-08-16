@@ -7,46 +7,79 @@ const tests = {
     withVersion(
       4,
       `
-      createMachine({
-        states: {
-          active: {
-            invoke: {
-              src: 'myService',
-            },
-            entry: 'myAction',
-            on: {
-              OFF: {
-                cond: 'myGuard',
-                target: 'inactive',
-                actions: ['myAction1', 'myAction2'],
+      createMachine(
+        {
+          states: {
+            active: {
+              invoke: {
+                src: 'myService',
               },
+              entry: 'myAction',
+              on: {
+                OFF: {
+                  cond: 'myGuard',
+                  target: 'inactive',
+                  actions: ['myAction1', 'myAction2'],
+                },
+              },
+              activities: 'myActivity',
             },
-            activities: 'myActivity',
           },
-        },
-      })
+        }, 
+        {
+          services: {
+            myService: () => {},
+          },
+          actions: {
+            myAction: () => {},
+            myAction1: () => {},
+            myAction2: () => {},
+          },
+          guards: {
+            myGuard: () => {},
+          },
+          activities: {
+            myActivity: () => {},
+          },
+        }
+      )
     `
     ),
     withVersion(
       5,
       `
-      createMachine({
-        states: {
-          active: {
-            invoke: {
-              src: 'myService',
-            },
-            entry: 'myAction',
-            on: {
-              OFF: {
-                guard: 'myGuard',
-                target: 'inactive',
-                actions: ['myAction1', 'myAction2'],
+      createMachine(
+        {
+          states: {
+            active: {
+              invoke: {
+                src: 'myActor',
+              },
+              entry: 'myAction',
+              on: {
+                OFF: {
+                  guard: 'myGuard',
+                  target: 'inactive',
+                  actions: ['myAction1', 'myAction2'],
+                },
               },
             },
           },
         },
-      })
+        {
+          actors: {
+            myActor: () => {},
+          },
+          actions: {
+            myAction: () => {},
+            myAction1: () => {},
+            myAction2: () => {},
+          },
+          guards: {
+            myGuard: () => {},
+          },
+        }
+      )
     `
     ),
     // inlined action creators are ok with allowKnownActionCreators=true
@@ -54,36 +87,82 @@ const tests = {
       4,
       `
       /* eslint no-inline-implementation: [ "warn", { "allowKnownActionCreators": true } ] */
-      createMachine({
-        states: {
-          active: {
-            entry: assign(),
-            on: {
-              OFF: {
-                actions: [send('EVENT'), assign()],
+      createMachine(
+        {
+          states: {
+            active: {
+              entry: assign({
+                childActor: () => spawn('childActor'),
+              }),
+              on: {
+                OFF: {
+                  actions: [send('EVENT'), assign()],
+                },
               },
+              exit: choose([{
+                cond: 'myGuard',
+                actions: 'myAction',
+              }]),
             },
           },
         },
-      })
+        {
+          services: {
+            childActor: () => {},
+          },
+          guards: {
+            myGuard: () => {},
+          },
+          actions: {
+            myAction: () => {},
+            choosableAction: choose([{
+              cond: () => {},
+              actions: () => {},
+            }]),
+          },
+        }
+      )
     `
     ),
     withVersion(
       5,
       `
       /* eslint no-inline-implementation: [ "warn", { "allowKnownActionCreators": true } ] */
-      createMachine({
-        states: {
-          active: {
-            entry: assign(),
-            on: {
-              OFF: {
-                actions: [sendParent('EVENT'), assign()],
+      createMachine(
+        {
+          states: {
+            active: {
+              entry: assign({
+                childActor: () => spawn('childActor'),
+              }),
+              on: {
+                OFF: {
+                  actions: [sendParent('EVENT'), assign()],
+                },
               },
+              exit: choose([{
+                guard: 'myGuard',
+                actions: 'myAction',
+              }]),
             },
           },
         },
-      })
+        {
+          actors: {
+            childActor: () => {},
+          },
+          guards: {
+            myGuard: () => {},
+          },
+          actions: {
+            myAction: () => {},
+            choosableAction: choose([{
+              guard: () => {},
+              actions: () => {},
+            }]),
+          },
+        }
+      )
     `
     ),
     // onDone, onError, array of transitions
@@ -434,16 +513,30 @@ const tests = {
     withVersion(4, {
       code: `
         /* eslint no-inline-implementation: [ "warn", { "allowKnownActionCreators": true } ] */
+        const { createMachine, spawn } = require('xstate')
         createMachine({
           states: {
             active: {
               entry: ['someAction', assign(), () => {}],
               on: {
                 OFF: {
-                  actions: ['someAction', someAction, () => {}, send()],
+                  actions: [
+                    'someAction',
+                    someAction,
+                    () => {},
+                    send(),
+                    choose([{
+                      cond: () => {},
+                      actions: () => {},
+                    }]),
+                  ],
                 },
               },
               activities: [myActivity, 'myActivity'],
+              exit: assign({
+                childActor1: () => spawn(() => {}),
+                childActor2: () => spawn(childActor),
+              }),
             },
           },
         })
@@ -452,21 +545,39 @@ const tests = {
         { messageId: 'moveActionToOptions' },
         { messageId: 'moveActionToOptions' },
         { messageId: 'moveActionToOptions' },
+        { messageId: 'moveGuardToOptions' },
+        { messageId: 'moveActionToOptions' },
         { messageId: 'moveActivityToOptions' },
+        { messageId: 'moveActorToOptions' },
+        { messageId: 'moveActorToOptions' },
       ],
     }),
     withVersion(5, {
       code: `
         /* eslint no-inline-implementation: [ "warn", { "allowKnownActionCreators": true } ] */
+        const { createMachine, spawn } = require('xstate')
         createMachine({
           states: {
             active: {
               entry: ['someAction', assign(), () => {}],
               on: {
                 OFF: {
-                  actions: ['someAction', someAction, () => {}, sendTo()],
+                  actions: [
+                    'someAction',
+                    someAction,
+                    () => {},
+                    sendParent(),
+                    choose([{
+                      guard: () => {},
+                      actions: () => {},
+                    }]),
+                  ],
                 },
               },
+              exit: assign({
+                childActor1: () => spawn(() => {}),
+                childActor2: () => spawn(childActor),
+              }),
             },
           },
         })
@@ -475,6 +586,10 @@ const tests = {
         { messageId: 'moveActionToOptions' },
         { messageId: 'moveActionToOptions' },
         { messageId: 'moveActionToOptions' },
+        { messageId: 'moveGuardToOptions' },
+        { messageId: 'moveActionToOptions' },
+        { messageId: 'moveActorToOptions' },
+        { messageId: 'moveActorToOptions' },
       ],
     }),
     // inline implementations inside array of transitions

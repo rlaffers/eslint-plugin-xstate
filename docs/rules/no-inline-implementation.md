@@ -34,7 +34,12 @@ createMachine({
           actions: () => {} // inlined action
         }
       },
-      activities: () => {} // inlined activity
+      activities: () => {}, // inlined activity
+      entry: assign({
+        childActor: () => spawn(
+          () => {}, // inlined actor
+        )
+      }),
     }
   }
 })
@@ -53,7 +58,12 @@ createMachine({
           actions: huffAndPuff // defined elsewhere
         }
       },
-      activities: beep // defined elsewhere
+      activities: beep, // defined elsewhere
+      entry: assign({
+        childActor: () => spawn(
+          childMachine, // inlined actor
+        )
+      }),
     }
   }
 })
@@ -77,11 +87,17 @@ createMachine(
             actions: ['huffAndPuff', 'log'] // arrays are ok too
           }
         },
-        activities: 'beep'
+        activities: 'beep',
+        entry: assign({
+          childActor: () => spawn(
+            'childMachine',
+          )
+        }),
       }
     }
   },
   {
+    // "services" in XState v4, renamed to "actors" in XState v5
     services: {
       someMachine: () => {}
     },
@@ -92,6 +108,7 @@ createMachine(
       huffAndPuff: () => {},
       log: () => {}
     },
+    // only in XState v4
     activities: {
       beep: () => {}
     }
@@ -106,7 +123,7 @@ createMachine({
       entry: assign({ count: 1 }),
       on: {
         TRIGGER: {
-          actions: [assign({ count: 0 }), send('EVENT')] // arrays are ok too
+          actions: [assign({ count: 0 }), raise({ type: 'EVENT' })] // arrays are ok too
         }
       }
     }
