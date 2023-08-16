@@ -133,7 +133,7 @@ const tests = {
           states: {
             active: {
               entry: assign({
-                childActor: () => spawn('childActor'),
+                childActor: ({ spawn }) => spawn('childActor'),
               }),
               on: {
                 OFF: {
@@ -555,7 +555,7 @@ const tests = {
     withVersion(5, {
       code: `
         /* eslint no-inline-implementation: [ "warn", { "allowKnownActionCreators": true } ] */
-        const { createMachine, spawn } = require('xstate')
+        const { createMachine } = require('xstate')
         createMachine({
           states: {
             active: {
@@ -575,8 +575,8 @@ const tests = {
                 },
               },
               exit: assign({
-                childActor1: () => spawn(() => {}),
-                childActor2: () => spawn(childActor),
+                childActor1: ({ spawn }) => spawn(() => {}),
+                childActor2: ({ spawn }) => spawn(childActor),
               }),
             },
           },
