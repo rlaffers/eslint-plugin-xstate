@@ -1,5 +1,7 @@
 # eslint-plugin-xstate
 
+TODO add prefer-predictable, no-auto-forward + their docs
+
 ESLint plugin to check for common mistakes and enforce good practices when using [XState library](https://xstate.js.org/).
 
 [![npm version](https://img.shields.io/npm/v/eslint-plugin-xstate)](https://npmjs.com/package/eslint-plugin-xstate)
@@ -42,6 +44,7 @@ Then configure the rules you want to use under the rules section.
     "xstate/invoke-usage": "error",
     "xstate/entry-exit-action": "error",
     "xstate/prefer-always": "error",
+    "xstate/prefer-predictable-action-arguments": "error",
     "xstate/no-misplaced-on-transition": "error",
     "xstate/no-invalid-transition-props": "error",
     "xstate/no-invalid-state-props": "error",
@@ -72,6 +75,21 @@ There is also an `all` configuration which includes every available rule. It enf
 }
 ```
 
+### XState v4
+The default shareable configurations are for XState v5. If you use the older XState v4, append `_v4` to the name of the configuration you want to use.
+
+```json
+{
+  "extends": ["plugin:xstate/recommended_v4"]
+}
+```
+
+```json
+{
+  "extends": ["plugin:xstate/all_v4"]
+}
+```
+
 ## Supported Rules
 
 ### Possible Errors
@@ -95,6 +113,7 @@ There is also an `all` configuration which includes every available rule. It enf
 | ------------------------------------------------------------------ | ----------------------------------------------------------------------- | ------------------ |
 | [no-inline-implementation](docs/rules/no-inline-implementation.md) | Suggest refactoring guards, actions and services into machine options   |                    |
 | [prefer-always](docs/rules/prefer-always.md)                       | Suggest using the `always` syntax for transient (eventless) transitions | :heavy_check_mark: |
+| [prefer-predictable-action-arguments](docs/rules/prefer-predictable-action-arguments.md) | Suggest turning on the `predictableActionArguments` option | :heavy_check_mark: |
 | [no-auto-forward](docs/rules/no-auto-forward.md)                   | Forbid auto-forwarding events to invoked services or spawned actors     |                    |
 
 ### Stylistic Issues
