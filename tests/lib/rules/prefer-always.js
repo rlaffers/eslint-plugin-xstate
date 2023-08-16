@@ -1,9 +1,12 @@
 const RuleTester = require('eslint').RuleTester
 const rule = require('../../../lib/rules/prefer-always')
+const { withVersion } = require('../utils/settings')
 
 const tests = {
   valid: [
-    `
+    withVersion(
+      4,
+      `
       createMachine({
         states: {
           playing: {
@@ -14,10 +17,26 @@ const tests = {
           },
         },
       })
-    `,
+    `
+    ),
+    withVersion(
+      5,
+      `
+      createMachine({
+        states: {
+          playing: {
+            always: [
+              { target: 'win', cond: 'didPlayerWin' },
+              { target: 'lose', cond: 'didPlayerLose' },
+            ],
+          },
+        },
+      })
+    `
+    ),
   ],
   invalid: [
-    {
+    withVersion(4, {
       code: `
         createMachine({
           states: {
@@ -33,7 +52,24 @@ const tests = {
         })
       `,
       errors: [{ messageId: 'preferAlways' }],
-    },
+    }),
+    withVersion(5, {
+      code: `
+        createMachine({
+          states: {
+            playing: {
+              on: {
+                '': [
+                  { target: 'win', cond: 'didPlayerWin' },
+                  { target: 'lose', cond: 'didPlayerLose' },
+                ],
+              },
+            },
+          },
+        })
+      `,
+      errors: [{ messageId: 'eventlessTransitionsDeprecated' }],
+    }),
   ],
 }
 
