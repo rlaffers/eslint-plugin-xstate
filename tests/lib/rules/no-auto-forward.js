@@ -16,7 +16,10 @@ const tests = {
           },
         },
       })
-    `,
+    `
+    ),
+    withVersion(
+      4,
       `
       createMachine({
         states: {
