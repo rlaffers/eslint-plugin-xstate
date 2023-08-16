@@ -1,9 +1,12 @@
 const RuleTester = require('eslint').RuleTester
 const rule = require('../../../lib/rules/no-infinite-loop')
+const { withVersion } = require('../utils/settings')
 
 const tests = {
   valid: [
-    `
+    withVersion(
+      4,
+      `
       createMachine({
         states: {
           deciding: {
@@ -13,9 +16,12 @@ const tests = {
           },
         },
       })
-    `,
+    `
+    ),
     // unconditional assign actions if they are not first
-    `
+    withVersion(
+      4,
+      `
       createMachine({
         states: {
           deciding: {
@@ -31,9 +37,32 @@ const tests = {
           },
         },
       })
-    `,
+    `
+    ),
+    withVersion(
+      5,
+      `
+      createMachine({
+        states: {
+          deciding: {
+            always: [
+              {
+                guard: ({ context }) => context.count > 5,
+                target: 'idle',
+              },
+              {
+                actions: assign({ count: ({ context }) => context.count + 1 }),
+              },
+            ],
+          },
+        },
+      })
+    `
+    ),
     // conditional assign actions
-    `
+    withVersion(
+      4,
+      `
       createMachine({
         states: {
           deciding: {
@@ -46,9 +75,29 @@ const tests = {
           },
         },
       })
-    `,
-    // conditional self transition with assign action
     `
+    ),
+    withVersion(
+      5,
+      `
+      createMachine({
+        states: {
+          deciding: {
+            always: [
+              {
+                guard: ({ context }) => context.count > 5,
+                actions: assign({ count: ({ context }) => context.count + 1 }),
+              },
+            ],
+          },
+        },
+      })
+    `
+    ),
+    // conditional self transition with assign action
+    withVersion(
+      4,
+      `
       createMachine({
         states: {
           deciding: {
@@ -62,9 +111,30 @@ const tests = {
           },
         },
       })
-    `,
-    // unconditional self transition with assign actions if they are not first
     `
+    ),
+    withVersion(
+      5,
+      `
+      createMachine({
+        states: {
+          deciding: {
+            always: [
+              {
+                guard: ({ context }) => context.count > 5,
+                target: 'deciding',
+                actions: assign({ count: ({ context }) => context.count + 1 }),
+              },
+            ],
+          },
+        },
+      })
+    `
+    ),
+    // unconditional self transition with assign actions if they are not first
+    withVersion(
+      4,
+      `
       createMachine({
         states: {
           deciding: {
@@ -81,10 +151,32 @@ const tests = {
           },
         },
       })
-    `,
+    `
+    ),
+    withVersion(
+      5,
+      `
+      createMachine({
+        states: {
+          deciding: {
+            always: [
+              {
+                guard: ({ context }) => ctx.count > 5,
+                target: 'idle',
+              },
+              {
+                target: 'deciding',
+                actions: assign({ count: ({ context }) => context.count + 1 }),
+              },
+            ],
+          },
+        },
+      })
+    `
+    ),
   ],
   invalid: [
-    {
+    withVersion(4, {
       code: `
         createMachine({
           states: {
@@ -95,8 +187,8 @@ const tests = {
         })
       `,
       errors: [{ messageId: 'noTargetNoGuardIsSingle' }],
-    },
-    {
+    }),
+    withVersion(4, {
       code: `
         createMachine({
           states: {
@@ -118,9 +210,9 @@ const tests = {
         { messageId: 'emptyTransitionNotFirst' },
         { messageId: 'unconditionalTransitionNoTargetActionsWithoutAssign' },
       ],
-    },
+    }),
     // self transitions
-    {
+    withVersion(4, {
       code: `
         createMachine({
           states: {
@@ -153,8 +245,42 @@ const tests = {
         { messageId: 'unconditionalSelfTransitionNotFirstNoAssign' },
         { messageId: 'conditionalSelfTransitionNoAssign' },
       ],
-    },
-    {
+    }),
+    withVersion(5, {
+      code: `
+        createMachine({
+          states: {
+            deciding: {
+              id: '#foo',
+              always: [
+                { target: 'deciding' },
+                { target: 'deciding' },
+                {
+                  target: '#foo',
+                  actions: () => {},
+                },
+                {
+                  guard: () => {},
+                  target: 'deciding',
+                },
+                {
+                  guard: () => {},
+                  target: 'deciding',
+                  actions: assign({}),
+                },
+              ],
+            },
+          },
+        })
+      `,
+      errors: [
+        { messageId: 'unconditionalSelfTransitionIsFirst' },
+        { messageId: 'unconditionalSelfTransitionNotFirstNoAssign' },
+        { messageId: 'unconditionalSelfTransitionNotFirstNoAssign' },
+        { messageId: 'conditionalSelfTransitionNoAssign' },
+      ],
+    }),
+    withVersion(4, {
       code: `
         createMachine({
           states: {
@@ -175,9 +301,31 @@ const tests = {
           messageId: 'firstConditionalSelfTransitionAndGuardNotCheckingContext',
         },
       ],
-    },
+    }),
+    withVersion(5, {
+      code: `
+        createMachine({
+          states: {
+            deciding: {
+              always: [
+                {
+                  guard: ({ event }) => event.type === 'EVENT',
+                  target: 'deciding',
+                  actions: assign({}),
+                },
+              ],
+            },
+          },
+        })
+      `,
+      errors: [
+        {
+          messageId: 'firstConditionalSelfTransitionAndGuardNotCheckingContext',
+        },
+      ],
+    }),
     // potential loops or useless
-    {
+    withVersion(4, {
       code: `
         createMachine({
           states: {
@@ -200,7 +348,31 @@ const tests = {
         { messageId: 'noTargetAndGuardNotCheckingContextIsFirst' },
         { messageId: 'noTargetHasGuardNoAssign' },
       ],
-    },
+    }),
+    withVersion(5, {
+      code: `
+        createMachine({
+          states: {
+            deciding: {
+              always: [
+                {
+                  guard: ({ event }) => event.type === 'EVENT',
+                  actions: assign({ count: 1 }),
+                },
+                {
+                  guard: () => {},
+                  actions: () => {},
+                },
+              ],
+            },
+          },
+        })
+      `,
+      errors: [
+        { messageId: 'noTargetAndGuardNotCheckingContextIsFirst' },
+        { messageId: 'noTargetHasGuardNoAssign' },
+      ],
+    }),
   ],
 }
 

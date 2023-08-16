@@ -43,12 +43,31 @@ createMachine({
 // ❌ The action on the 2nd transition does not update the context,
 // so executing it will not make the 1st transition valid on the next evaluation.
 // (or the 1st transition is always taken, so the 2nd transition is useless)
+// XState v4
 createMachine({
   states: {
     deciding: {
       always: [
         {
           cond: (ctx) => ctx.count > 5,
+          target: 'idle',
+        },
+        // no guard, no target, no assign action
+        {
+          actions: () => console.log('hello'),
+        },
+      ],
+    },
+  },
+})
+
+// ❌ Same as above with XState v5
+createMachine({
+  states: {
+    deciding: {
+      always: [
+        {
+          guard: ({ context }) => context.count > 5,
           target: 'idle',
         },
         // no guard, no target, no assign action
@@ -90,6 +109,7 @@ createMachine({
 // ❌ No target. The action does not update the context. This transition is
 // either useless (never taken because of its guard), or guarantees an
 // infinite loop error (if its guard is passed once then it will always be passed).
+// XState v4
 createMachine({
   states: {
     deciding: {
@@ -102,12 +122,26 @@ createMachine({
     },
   },
 })
+
+// ❌ Same as above with XState v5
+createMachine({
+  states: {
+    deciding: {
+      always: [
+        {
+          guard: () => {},
+          actions: () => console.log('hello'),
+        },
+      ],
+    },
+  },
+})
 ```
 
 Examples of **correct** code for this rule:
 
 ```javascript
-// ✅ Has target
+// ✅ Has target (XState v4)
 createMachine({
   states: {
     deciding: {
@@ -124,8 +158,26 @@ createMachine({
   },
 })
 
+// ✅ Has target (XState v5)
+createMachine({
+  states: {
+    deciding: {
+      always: [
+        {
+          guard: () => {},
+          target: 'busy',
+        },
+        {
+          target: 'idle',
+        },
+      ],
+    },
+  },
+})
+
 // ✅ The second transition updates the context, so there's a chance
 // that the first transition will eventually become valid.
+// XState v4
 createMachine({
   states: {
     deciding: {
@@ -142,14 +194,49 @@ createMachine({
   },
 })
 
+// ✅ XState v5
+createMachine({
+  states: {
+    deciding: {
+      always: [
+        {
+          guard: ({ context }) => context.count > 5,
+          target: 'idle',
+        },
+        {
+          actions: assign({ count: ({ context }) => context.count + 1 }),
+        },
+      ],
+    },
+  },
+})
+
 // ✅ We are optimistic about the 2nd transition action updating the context.
 // Therefore there's a chance that the first transition will eventually become valid.
+// XState v4
 createMachine({
   states: {
     deciding: {
       always: [
         {
           cond: (ctx) => ctx.count > 5,
+          target: 'idle',
+        },
+        {
+          actions: 'someAction', // hopefully an assign() action
+        },
+      ],
+    },
+  },
+})
+
+// XState v5
+createMachine({
+  states: {
+    deciding: {
+      always: [
+        {
+          guard: ({ context }) => context.count > 5,
           target: 'idle',
         },
         {
