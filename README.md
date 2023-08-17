@@ -96,7 +96,7 @@ The default shareable configurations are for XState v5. If you use the older XSt
 
 | Rule                                                                               | Description                                                        | Recommended        |
 | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------ | ------------------ |
-| [spawn-usage](docs/rules/spawn-usage.md)                                           | Enforce correct usage of `spawn`                                   | :heavy_check_mark: |
+| [spawn-usage](docs/rules/spawn-usage.md)                                           | Enforce correct usage of `spawn`. **Only for XState v4!**                                   | :heavy_check_mark: |
 | [no-infinite-loop](docs/rules/no-infinite-loop.md)                                 | Detect infinite loops with eventless transitions                   | :heavy_check_mark: |
 | [no-imperative-action](docs/rules/no-imperative-action.md)                         | Forbid using action creators imperatively                          | :heavy_check_mark: |
 | [no-ondone-outside-compound-state](docs/rules/no-ondone-outside-compound-state.md) | Forbid onDone transitions on `atomic`, `history` and `final` nodes | :heavy_check_mark: |
