@@ -1,7 +1,5 @@
 # eslint-plugin-xstate
 
-TODO add prefer-predictable, no-auto-forward + their docs
-
 ESLint plugin to check for common mistakes and enforce good practices when using [XState library](https://xstate.js.org/).
 
 [![npm version](https://img.shields.io/npm/v/eslint-plugin-xstate)](https://npmjs.com/package/eslint-plugin-xstate)
@@ -75,8 +73,8 @@ There is also an `all` configuration which includes every available rule. It enf
 }
 ```
 
-### XState v4
-The default shareable configurations are for XState v5. If you use the older XState v4, append `_v4` to the name of the configuration you want to use.
+### XState Version
+The default shareable configurations are for XState v5. If you use XState version 4, append `_v4` to the name of the configuration you want to use.
 
 ```json
 {
@@ -87,6 +85,17 @@ The default shareable configurations are for XState v5. If you use the older XSt
 ```json
 {
   "extends": ["plugin:xstate/all_v4"]
+}
+```
+
+If you do not use shareable configs, you need to manually specify the XState version in the ESLint config (defaults to 5):
+```json
+{
+  "settings": {
+    "xstate": {
+      "version": 4
+    }
+  }
 }
 ```
 
