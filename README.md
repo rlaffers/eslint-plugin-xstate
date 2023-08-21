@@ -46,6 +46,7 @@ Then configure the rules you want to use under the rules section.
     "xstate/no-misplaced-on-transition": "error",
     "xstate/no-invalid-transition-props": "error",
     "xstate/no-invalid-state-props": "error",
+    "xstate/no-invalid-conditional-action": "error",
     "xstate/no-async-guard": "error",
     "xstate/event-names": ["warn", "macroCase"],
     "xstate/state-names": ["warn", "camelCase"],
@@ -105,7 +106,7 @@ If you do not use shareable configs, you need to manually specify the XState ver
 
 | Rule                                                                               | Description                                                        | Recommended        |
 | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------ | ------------------ |
-| [spawn-usage](docs/rules/spawn-usage.md)                                           | Enforce correct usage of `spawn`. **Only for XState v4!**                                   | :heavy_check_mark: |
+| [spawn-usage](docs/rules/spawn-usage.md)                                           | Enforce correct usage of `spawn`. **Only for XState v4!**          | :heavy_check_mark: |
 | [no-infinite-loop](docs/rules/no-infinite-loop.md)                                 | Detect infinite loops with eventless transitions                   | :heavy_check_mark: |
 | [no-imperative-action](docs/rules/no-imperative-action.md)                         | Forbid using action creators imperatively                          | :heavy_check_mark: |
 | [no-ondone-outside-compound-state](docs/rules/no-ondone-outside-compound-state.md) | Forbid onDone transitions on `atomic`, `history` and `final` nodes | :heavy_check_mark: |
@@ -115,6 +116,7 @@ If you do not use shareable configs, you need to manually specify the XState ver
 | [no-invalid-transition-props](docs/rules/no-invalid-transition-props.md)           | Forbid invalid properties in transition declarations               | :heavy_check_mark: |
 | [no-invalid-state-props](docs/rules/no-invalid-state-props.md)                     | Forbid invalid properties in state node declarations               | :heavy_check_mark: |
 | [no-async-guard](docs/rules/no-async-guard.md)                                     | Forbid asynchronous guard functions                                | :heavy_check_mark: |
+| [no-invalid-conditional-action](docs/rules/no-invalid-conditional-action.md)       | Forbid invalid declarations inside the `choose` action creator     | :heavy_check_mark: |
 
 ### Best Practices
 
