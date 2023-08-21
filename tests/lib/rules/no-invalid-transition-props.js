@@ -134,6 +134,43 @@ const tests = {
       })
     `
     ),
+    // transitions within the "always" block
+    withVersion(
+      4,
+      `
+      createMachine({
+        states: {
+          deciding: {
+            always: [
+              {
+                cond: 'myGuard',
+                target: 'active',
+                actions: [],
+              }
+            ]
+          }
+        }
+      })
+      `
+    ),
+    withVersion(
+      5,
+      `
+      createMachine({
+        states: {
+          deciding: {
+            always: [
+              {
+                guard: 'myGuard',
+                target: 'active',
+                actions: [],
+              }
+            ]
+          }
+        }
+      })
+      `
+    ),
   ],
   invalid: [
     withVersion(4, {
@@ -298,6 +335,75 @@ const tests = {
           data: { propName: 'internal' },
         },
         { messageId: 'invalidTransitionProperty', data: { propName: 'entry' } },
+      ],
+    }),
+    // transitions within the "always" block
+    withVersion(4, {
+      code: `
+          createMachine({
+            states: {
+              deciding: {
+                always: [
+                  {
+                    unknown: '???',
+                    cond: 'myGuard',
+                    guard: '???',
+                    invoke: '???',
+                    target: 'active',
+                    actions: [],
+                  }
+                ]
+              }
+            }
+          })
+        `,
+      errors: [
+        {
+          messageId: 'invalidTransitionProperty',
+          data: { propName: 'unknown' },
+        },
+        {
+          messageId: 'invalidTransitionProperty',
+          data: { propName: 'guard' },
+        },
+        {
+          messageId: 'invalidTransitionProperty',
+          data: { propName: 'invoke' },
+        },
+      ],
+    }),
+    withVersion(5, {
+      code: `
+          createMachine({
+            states: {
+              deciding: {
+                always: [
+                  {
+                    unknown: '???',
+                    cond: '???',
+                    guard: 'myGuard',
+                    invoke: '???',
+                    target: 'active',
+                    actions: [],
+                  }
+                ]
+              }
+            }
+          })
+        `,
+      errors: [
+        {
+          messageId: 'invalidTransitionProperty',
+          data: { propName: 'unknown' },
+        },
+        {
+          messageId: 'invalidTransitionProperty',
+          data: { propName: 'cond' },
+        },
+        {
+          messageId: 'invalidTransitionProperty',
+          data: { propName: 'invoke' },
+        },
       ],
     }),
   ],
