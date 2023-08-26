@@ -171,6 +171,55 @@ const tests = {
       })
       `
     ),
+    // no errors outside of the createMachine calls by default
+    withVersion(
+      4,
+      `
+      const config = {
+        states: {
+          idle: {
+            always: [
+             {
+               foo: '???',
+             },
+            ],
+            on: {
+              EVENT: {
+                foo: '???'
+              }
+            },
+          },
+        },
+        onDone: {
+          foo: '???'
+        },
+      }
+      `
+    ),
+    withVersion(
+      5,
+      `
+      const config = {
+        states: {
+          idle: {
+            always: [
+             {
+               foo: '???',
+             },
+            ],
+            on: {
+              EVENT: {
+                foo: '???'
+              }
+            },
+          },
+        },
+        onDone: {
+          foo: '???'
+        },
+      }
+      `
+    ),
   ],
   invalid: [
     withVersion(4, {
@@ -403,6 +452,85 @@ const tests = {
         {
           messageId: 'invalidTransitionProperty',
           data: { propName: 'invoke' },
+        },
+      ],
+    }),
+    // errors reported outside of createMachine if there is a comment directive
+    withVersion(4, {
+      code: `
+        /* eslint-plugin-xstate-include */
+        const config = {
+          states: {
+            idle: {
+              always: [
+                {
+                  foo: '???',
+                },
+              ],
+              on: {
+                EVENT: {
+                  cond: 'myGuard',
+                  boo: '???',
+                },
+              },
+            },
+          },
+          onDone: {
+            unknown: '???'
+          },
+        }
+        `,
+      errors: [
+        {
+          messageId: 'invalidTransitionProperty',
+          data: { propName: 'foo' },
+        },
+        {
+          messageId: 'invalidTransitionProperty',
+          data: { propName: 'boo' },
+        },
+        {
+          messageId: 'invalidTransitionProperty',
+          data: { propName: 'unknown' },
+        },
+      ],
+    }),
+    withVersion(5, {
+      code: `
+        /* eslint-plugin-xstate-include */
+        const config = {
+          states: {
+            idle: {
+              always: [
+                {
+                  foo: '???',
+                },
+              ],
+              on: {
+                EVENT: {
+                  guard: 'myGuard',
+                  boo: '???',
+                },
+              },
+            },
+          },
+          onDone: {
+            unknown: '???'
+          },
+        }
+        `,
+      errors: [
+        {
+          messageId: 'invalidTransitionProperty',
+          data: { propName: 'foo' },
+        },
+        {
+          messageId: 'invalidTransitionProperty',
+          data: { propName: 'boo' },
+        },
+        {
+          messageId: 'invalidTransitionProperty',
+          data: { propName: 'unknown' },
         },
       ],
     }),

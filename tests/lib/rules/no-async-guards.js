@@ -81,6 +81,21 @@ const tests = {
       )
     `
     ),
+    withVersion(
+      5,
+      `
+      createMachine(
+        {},
+        {
+          guards: {
+            myGuard: () => {},
+            myGuard2: function () {},
+            myGuard3() {},
+          },
+        }
+      )
+    `
+    ),
   ],
   invalid: [
     withVersion(4, {
@@ -193,6 +208,67 @@ const tests = {
       `,
       errors: [
         { messageId: 'guardCannotBeAsync' },
+        { messageId: 'guardCannotBeAsync' },
+        { messageId: 'guardCannotBeAsync' },
+      ],
+    }),
+    // lint code outside of createMachine if it is enforced
+    withVersion(4, {
+      code: `
+      /* eslint-plugin-xstate-include */
+      const obj = {
+        on: {
+          EVENT: {
+            cond: async () => {},
+          },
+        },
+        invoke: {
+          src: 'myActor',
+          onDone: {
+            cond: async () => {},
+          },
+        },
+      }
+      `,
+      errors: [
+        { messageId: 'guardCannotBeAsync' },
+        { messageId: 'guardCannotBeAsync' },
+      ],
+    }),
+    withVersion(5, {
+      code: `
+      /* eslint-plugin-xstate-include */
+      const obj = {
+        on: {
+          EVENT: {
+            guard: async () => {},
+          },
+        },
+        invoke: {
+          src: 'myActor',
+          onDone: {
+            guard: async () => {},
+          },
+        },
+      }
+      `,
+      errors: [
+        { messageId: 'guardCannotBeAsync' },
+        { messageId: 'guardCannotBeAsync' },
+      ],
+    }),
+    // check implementations outside of createMachine
+    withVersion(4, {
+      code: `
+      /* eslint-plugin-xstate-include */
+      const implementations = {
+        guards: {
+          guard1: async () => {},
+          guard2: async function () {},
+        }
+      }
+      `,
+      errors: [
         { messageId: 'guardCannotBeAsync' },
         { messageId: 'guardCannotBeAsync' },
       ],

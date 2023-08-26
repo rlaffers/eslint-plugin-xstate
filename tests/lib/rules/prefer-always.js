@@ -34,6 +34,41 @@ const tests = {
       })
     `
     ),
+    // no errors outside of createMachine by default
+    withVersion(
+      4,
+      `
+        const config = {
+          states: {
+            playing: {
+              on: {
+                '': [
+                  { target: 'win', cond: 'didPlayerWin' },
+                  { target: 'lose', cond: 'didPlayerLose' },
+                ],
+              },
+            },
+          },
+        }
+    `
+    ),
+    withVersion(
+      5,
+      `
+        const config = {
+          states: {
+            playing: {
+              on: {
+                '': [
+                  { target: 'win', guard: 'didPlayerWin' },
+                  { target: 'lose', guard: 'didPlayerLose' },
+                ],
+              },
+            },
+          },
+        }
+    `
+    ),
   ],
   invalid: [
     withVersion(4, {
@@ -67,6 +102,43 @@ const tests = {
             },
           },
         })
+      `,
+      errors: [{ messageId: 'eventlessTransitionsDeprecated' }],
+    }),
+    // errors reported outside of createMachine if there is the comment directive
+    withVersion(4, {
+      code: `
+        /* eslint-plugin-xstate-include */
+        const config = {
+          states: {
+            playing: {
+              on: {
+                '': [
+                  { target: 'win', cond: 'didPlayerWin' },
+                  { target: 'lose', cond: 'didPlayerLose' },
+                ],
+              },
+            },
+          },
+        }
+      `,
+      errors: [{ messageId: 'preferAlways' }],
+    }),
+    withVersion(5, {
+      code: `
+        /* eslint-plugin-xstate-include */
+        const config = {
+          states: {
+            playing: {
+              on: {
+                '': [
+                  { target: 'win', guard: 'didPlayerWin' },
+                  { target: 'lose', guard: 'didPlayerLose' },
+                ],
+              },
+            },
+          },
+        }
       `,
       errors: [{ messageId: 'eventlessTransitionsDeprecated' }],
     }),

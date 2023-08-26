@@ -110,6 +110,37 @@ const tests = {
       })
     `
     ),
+    // no errors reported outside of createMachine by default
+    withVersion(
+      4,
+      `
+      const config = {
+        id: 'myMachine',
+        context: {},
+        foo: '???',
+        states: {
+          idle: {
+            foo: '???',
+          },
+        },
+      }
+      `
+    ),
+    withVersion(
+      5,
+      `
+      const config = {
+        id: 'myMachine',
+        context: {},
+        foo: '???',
+        states: {
+          idle: {
+            foo: '???',
+          },
+        },
+      }
+      `
+    ),
   ],
   invalid: [
     // unrecognized prop names
@@ -247,6 +278,49 @@ const tests = {
         { messageId: 'invalidTypeValue', data: { value: 'paralel' } },
         { messageId: 'invalidTypeValue', data: { value: 'done' } },
         { messageId: 'invalidHistoryValue', data: { value: 'shallowish' } },
+      ],
+    }),
+    // should report errors outside of createMachine if there is the comment directive
+    withVersion(4, {
+      code: `
+        /* eslint-plugin-xstate-include */
+        const config = {
+          id: 'myMachine',
+          context: {
+            simpson: 10,
+          },
+          foo: '???',
+          states: {
+            idle: {
+              boo: '???',
+            },
+          },
+        }
+      `,
+      errors: [
+        { messageId: 'invalidRootStateProperty', data: { propName: 'foo' } },
+        { messageId: 'invalidStateProperty', data: { propName: 'boo' } },
+      ],
+    }),
+    withVersion(5, {
+      code: `
+        /* eslint-plugin-xstate-include */
+        const config = {
+          id: 'myMachine',
+          context: {
+            simpson: 10,
+          },
+          foo: '???',
+          states: {
+            idle: {
+              boo: '???',
+            },
+          },
+        }
+      `,
+      errors: [
+        { messageId: 'invalidRootStateProperty', data: { propName: 'foo' } },
+        { messageId: 'invalidStateProperty', data: { propName: 'boo' } },
       ],
     }),
   ],

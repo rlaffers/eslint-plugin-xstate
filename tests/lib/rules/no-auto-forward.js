@@ -92,6 +92,31 @@ const tests = {
       `,
       errors: [{ messageId: 'autoForwardDeprecated' }],
     }),
+    // check the code outside of createMachine if the rule is enforced
+    withVersion(4, {
+      code: `
+        /* eslint-plugin-xstate-include */
+        const config = {
+          invoke: {
+            src: 'myActorLogic',
+            autoForward: true,
+          }
+        }
+      `,
+      errors: [{ messageId: 'noAutoForward' }],
+    }),
+    withVersion(5, {
+      code: `
+        /* eslint-plugin-xstate-include */
+        const config = {
+          invoke: {
+            src: 'myActorLogic',
+            autoForward: true,
+          }
+        }
+      `,
+      errors: [{ messageId: 'autoForwardDeprecated' }],
+    }),
   ],
 }
 

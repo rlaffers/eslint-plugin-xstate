@@ -18,6 +18,25 @@ const tests = {
       createMachine({})
     `
     ),
+    // no errors outside of createMachine by default
+    withVersion(
+      4,
+      `
+      const config = {
+        predictableActionArguments: false,
+        context: {},
+      }
+    `
+    ),
+    withVersion(
+      5,
+      `
+      const config = {
+        predictableActionArguments: false,
+        context: {},
+      }
+    `
+    ),
   ],
   invalid: [
     withVersion(4, {
@@ -82,6 +101,57 @@ initial: 'ready'
           states: {},
           predictableActionArguments: true
         })
+      `,
+    }),
+    // errors reported outside of createMachine if there is the comment directive
+    withVersion(4, {
+      code: `
+        /* eslint-plugin-xstate-include */
+        const config = {
+          context: {},
+        }
+      `,
+      errors: [{ messageId: 'preferPredictableActionArguments' }],
+      output: `
+        /* eslint-plugin-xstate-include */
+        const config = {
+          predictableActionArguments: true,
+context: {},
+        }
+      `,
+    }),
+    withVersion(4, {
+      code: `
+        /* eslint-plugin-xstate-include */
+        const config = {
+          predictableActionArguments: false,
+          context: {},
+        }
+      `,
+      errors: [{ messageId: 'preferPredictableActionArguments' }],
+      output: `
+        /* eslint-plugin-xstate-include */
+        const config = {
+          predictableActionArguments: true,
+          context: {},
+        }
+      `,
+    }),
+    withVersion(5, {
+      code: `
+        /* eslint-plugin-xstate-include */
+        const config = {
+          context: {},
+          predictableActionArguments: false
+        }
+      `,
+      errors: [{ messageId: 'deprecatedPredictableActionArguments' }],
+      output: `
+        /* eslint-plugin-xstate-include */
+        const config = {
+          context: {},
+          
+        }
       `,
     }),
   ],

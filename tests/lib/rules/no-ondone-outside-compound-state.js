@@ -59,6 +59,30 @@ const tests = {
         },
       })
     `,
+    // no errors outside of createMachine by default
+    `
+      const config = {
+        states: {
+          active: {
+            type: 'atomic',
+            onDone: 'idle',
+          },
+          hist: {
+            type: 'history',
+            onDone: 'idle',
+          },
+          idle: {
+            onDone: 'active',
+          },
+          finished: {
+            type: 'final',
+            onDone: {
+              actions: () => {},
+            },
+          }
+        },
+      }
+    `,
   ],
   invalid: [
     {
@@ -123,6 +147,39 @@ const tests = {
         })
       `,
       errors: [{ messageId: 'onDoneUsedIncorrectly' }],
+    },
+    // errors reported outside of createMachine if there is the comment directive
+    {
+      code: `
+        /* eslint-plugin-xstate-include */
+        const config = {
+          states: {
+            active: {
+              type: 'atomic',
+              onDone: 'idle',
+            },
+            hist: {
+              type: 'history',
+              onDone: 'idle',
+            },
+            idle: {
+              onDone: 'active',
+            },
+            finished: {
+              type: 'final',
+              onDone: {
+                actions: () => {},
+              },
+            }
+          },
+        }
+      `,
+      errors: [
+        { messageId: 'onDoneOnAtomicStateForbidden' },
+        { messageId: 'onDoneOnHistoryStateForbidden' },
+        { messageId: 'onDoneUsedIncorrectly' },
+        { messageId: 'onDoneOnFinalStateForbidden' },
+      ],
     },
   ],
 }

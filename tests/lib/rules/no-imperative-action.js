@@ -425,6 +425,98 @@ const tests = {
         },
       ],
     }),
+    withVersion(4, {
+      code: `
+        /* eslint-plugin-xstate-include */
+        const config = {
+          actions: {
+            myAction1: () => assign(),
+            myAction2: () => { send() },
+            myAction3: function() { sendParent() },
+            myAction4: () => respond(),
+            myAction5: () => raise(),
+          },
+          entry: () => send(),
+          exit: () => send(),
+        }
+      `,
+      errors: [
+        {
+          messageId: 'imperativeActionCreator',
+          data: { actionCreator: 'assign' },
+        },
+        {
+          messageId: 'imperativeActionCreator',
+          data: { actionCreator: 'send' },
+        },
+        {
+          messageId: 'imperativeActionCreator',
+          data: { actionCreator: 'sendParent' },
+        },
+        {
+          messageId: 'imperativeActionCreator',
+          data: { actionCreator: 'respond' },
+        },
+        {
+          messageId: 'imperativeActionCreator',
+          data: { actionCreator: 'raise' },
+        },
+        {
+          messageId: 'imperativeActionCreator',
+          data: { actionCreator: 'send' },
+        },
+        {
+          messageId: 'imperativeActionCreator',
+          data: { actionCreator: 'send' },
+        },
+      ],
+    }),
+    withVersion(5, {
+      code: `
+        /* eslint-plugin-xstate-include */
+        const config = {
+          actions: {
+            myAction1: () => assign(),
+            myAction2: () => { sendTo() },
+            myAction3: function() { sendParent() },
+            myAction4: () => choose(),
+            myAction5: () => raise(),
+          },
+          entry: () => sendTo(),
+          exit: () => sendTo(),
+        }
+      `,
+      errors: [
+        {
+          messageId: 'imperativeActionCreator',
+          data: { actionCreator: 'assign' },
+        },
+        {
+          messageId: 'imperativeActionCreator',
+          data: { actionCreator: 'sendTo' },
+        },
+        {
+          messageId: 'imperativeActionCreator',
+          data: { actionCreator: 'sendParent' },
+        },
+        {
+          messageId: 'imperativeActionCreator',
+          data: { actionCreator: 'choose' },
+        },
+        {
+          messageId: 'imperativeActionCreator',
+          data: { actionCreator: 'raise' },
+        },
+        {
+          messageId: 'imperativeActionCreator',
+          data: { actionCreator: 'sendTo' },
+        },
+        {
+          messageId: 'imperativeActionCreator',
+          data: { actionCreator: 'sendTo' },
+        },
+      ],
+    }),
   ],
 }
 

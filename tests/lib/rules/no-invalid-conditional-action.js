@@ -51,6 +51,61 @@ const tests = {
       })
       `
     ),
+    // no errors outside ofc reateMachine by default
+    withVersion(
+      4,
+      `
+        const config = {
+          states: {
+            active: {
+              on: {
+                EVENT1: {
+                  actions: choose([{
+                    cond: 'myGuard',
+                    guard: '???',
+                    invoke: '???',
+                    actions: [],
+                  }]),
+                },
+              },
+              entry: choose([{
+                cond: 'myGuard',
+                guard: '???',
+                invoke: '???',
+                actions: [],
+              }]),
+            }
+          }
+        }
+      `
+    ),
+    withVersion(
+      5,
+      `
+        const config = {
+          states: {
+            active: {
+              on: {
+                EVENT1: {
+                  actions: choose([{
+                    guard: 'myGuard',
+                    cond: '???',
+                    invoke: '???',
+                    actions: [],
+                  }]),
+                },
+              },
+              entry: choose([{
+                guard: 'myGuard',
+                cond: '???',
+                invoke: '???',
+                actions: [],
+              }]),
+            }
+          }
+        }
+      `
+    ),
   ],
   invalid: [
     // transitions within the choose action creator
@@ -233,6 +288,97 @@ const tests = {
         {
           messageId: 'invalidArgumentForChoose',
           data: { argType: 'null' },
+        },
+      ],
+    }),
+    // should report errors outside of createMachine with the directive
+    withVersion(4, {
+      code: `
+        /* eslint-plugin-xstate-include */
+        const config = {
+          states: {
+            active: {
+              on: {
+                EVENT1: {
+                  actions: choose([{
+                    cond: 'myGuard',
+                    guard: '???',
+                    invoke: '???',
+                    actions: [],
+                  }]),
+                },
+              },
+              entry: choose([{
+                cond: 'myGuard',
+                guard: '???',
+                invoke: '???',
+                actions: [],
+              }]),
+            }
+          }
+        }
+      `,
+      errors: [
+        {
+          messageId: 'invalidConditionalActionProperty',
+          data: { propName: 'guard' },
+        },
+        {
+          messageId: 'invalidConditionalActionProperty',
+          data: { propName: 'invoke' },
+        },
+        {
+          messageId: 'invalidConditionalActionProperty',
+          data: { propName: 'guard' },
+        },
+        {
+          messageId: 'invalidConditionalActionProperty',
+          data: { propName: 'invoke' },
+        },
+      ],
+    }),
+    withVersion(5, {
+      code: `
+        /* eslint-plugin-xstate-include */
+        const config = {
+          states: {
+            active: {
+              on: {
+                EVENT1: {
+                  actions: choose([{
+                    guard: 'myGuard',
+                    cond: '???',
+                    invoke: '???',
+                    actions: [],
+                  }]),
+                },
+              },
+              entry: choose([{
+                guard: 'myGuard',
+                cond: '???',
+                invoke: '???',
+                actions: [],
+              }]),
+            }
+          }
+        }
+      `,
+      errors: [
+        {
+          messageId: 'invalidConditionalActionProperty',
+          data: { propName: 'cond' },
+        },
+        {
+          messageId: 'invalidConditionalActionProperty',
+          data: { propName: 'invoke' },
+        },
+        {
+          messageId: 'invalidConditionalActionProperty',
+          data: { propName: 'cond' },
+        },
+        {
+          messageId: 'invalidConditionalActionProperty',
+          data: { propName: 'invoke' },
         },
       ],
     }),

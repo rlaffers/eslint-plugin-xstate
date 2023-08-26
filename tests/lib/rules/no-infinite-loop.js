@@ -174,6 +174,19 @@ const tests = {
       })
     `
     ),
+    // outside of createMachine it is not linted by default
+    withVersion(
+      4,
+      `
+      const config = {
+        states: {
+          deciding: {
+            always: {},
+          },
+        },
+      }
+    `
+    ),
   ],
   invalid: [
     withVersion(4, {
@@ -373,6 +386,20 @@ const tests = {
         { messageId: 'noTargetHasGuardNoAssign' },
       ],
     }),
+    // outside of createMachine it is not linted by default
+    withVersion(4, {
+      code: `
+        /* eslint-plugin-xstate-include */
+        const config = {
+          states: {
+            deciding: {
+              always: {},
+            },
+          },
+        }
+      `,
+      errors: [{ messageId: 'noTargetNoGuardIsSingle' }],
+    }),
   ],
 }
 
@@ -381,4 +408,4 @@ const ruleTester = new RuleTester({
     ecmaVersion: 6,
   },
 })
-ruleTester.run('no-infnite-loop', rule, tests)
+ruleTester.run('no-infinite-loop', rule, tests)

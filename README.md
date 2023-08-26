@@ -133,3 +133,17 @@ If you do not use shareable configs, you need to manually specify the XState ver
 | ---------------------------------------- | ------------------------------------------------------------------------ | ----------- |
 | [event-names](docs/rules/event-names.md) | Suggest consistent formatting of event names                             |             |
 | [state-names](docs/rules/state-names.md) | Suggest consistent formatting of state names and prevent confusing names |             |
+
+## Comment Directives
+
+By default, the plugin lints only code within the `createMachine` or `Machine` calls. However, if your machine configuration is imported from another file, you will need to enable this plugin's rules by adding a comment directive to the top of the file:
+
+```js
+/* eslint-plugin-xstate-include */
+// 💡 This machine config will no w be linted too.
+export machine = {
+  initial: 'active',
+  context: {},
+  // etc
+}
+```

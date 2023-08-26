@@ -87,6 +87,7 @@ const tests = {
       4,
       `
       /* eslint no-inline-implementation: [ "warn", { "allowKnownActionCreators": true } ] */
+      const { spawn } = require('xstate')
       createMachine(
         {
           states: {
@@ -365,6 +366,30 @@ const tests = {
           },
         },
       })
+    `
+    ),
+    // code outside of createMachine is ignored by default
+    withVersion(
+      4,
+      `
+        const config = {
+          states: {
+            active: {
+              invoke: {
+                src: () => {},
+              },
+              entry: () => {},
+              on: {
+                OFF: {
+                  cond: () => {},
+                  target: 'inactive',
+                  actions: () => {},
+                },
+              },
+              activities: () => {},
+            },
+          },
+        }
     `
     ),
   ],
@@ -694,6 +719,82 @@ const tests = {
         { messageId: 'moveGuardToOptions' },
         { messageId: 'moveActionToOptions' },
         { messageId: 'moveActionToOptions' },
+      ],
+    }),
+    // reports error ourside of createMachine if there is the include directive
+    withVersion(4, {
+      code: `
+        /* eslint no-inline-implementation: [ "warn", { "allowKnownActionCreators": true } ] */
+        /* eslint-plugin-xstate-include */
+        const { spawn } = require('xstate')
+        const config = {
+          states: {
+            active: {
+              invoke: {
+                src: () => {},
+              },
+              entry: () => {},
+              on: {
+                OFF: {
+                  cond: () => {},
+                  target: 'inactive',
+                  actions: [
+                    () => {},
+                    assign({
+                      ref: () => spawn(() => {}),
+                    })
+                  ]
+                },
+              },
+              activities: () => {},
+            },
+          },
+        }
+      `,
+      errors: [
+        { messageId: 'moveActorToOptions' },
+        { messageId: 'moveActionToOptions' },
+        { messageId: 'moveGuardToOptions' },
+        { messageId: 'moveActionToOptions' },
+        { messageId: 'moveActorToOptions' },
+        { messageId: 'moveActivityToOptions' },
+      ],
+    }),
+    withVersion(5, {
+      code: `
+        /* eslint no-inline-implementation: [ "warn", { "allowKnownActionCreators": true } ] */
+        /* eslint-plugin-xstate-include */
+        const config = {
+          states: {
+            active: {
+              invoke: {
+                src: () => {},
+              },
+              entry: () => {},
+              on: {
+                OFF: {
+                  guard: () => {},
+                  target: 'inactive',
+                  actions: [
+                    () => {},
+                    assign({
+                      ref: ({ spawn }) => spawn(() => {}),
+                    })
+                  ]
+                },
+              },
+              activities: () => {},
+            },
+          },
+        }
+      `,
+      errors: [
+        { messageId: 'moveActorToOptions' },
+        { messageId: 'moveActionToOptions' },
+        { messageId: 'moveGuardToOptions' },
+        { messageId: 'moveActionToOptions' },
+        { messageId: 'moveActorToOptions' },
+        { messageId: 'moveActivityToOptions' },
       ],
     }),
   ],
