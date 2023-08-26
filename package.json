@@ -2,7 +2,11 @@
   "name": "eslint-plugin-xstate",
   "version": "0.0.0-semantically-released",
   "description": "ESLint rules for XState",
-  "keywords": ["eslint", "eslintplugin", "eslint-plugin"],
+  "keywords": [
+    "eslint",
+    "eslintplugin",
+    "eslint-plugin"
+  ],
   "author": "Richard Laffers",
   "main": "lib/index.js",
   "scripts": {
@@ -24,7 +28,7 @@
     "@commitlint/config-conventional": "^17.0.3",
     "commitizen": "^4.2.3",
     "cz-conventional-changelog": "^3.3.0",
-    "eslint": "^8.17.0",
+    "eslint": "^8.48.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.26.0",
