@@ -19,6 +19,9 @@ const tests = {
           sendParent('MOUSE.CLICK'),
           raise('MY_MOUSE.SCROLL_DOWN'),
           send({ type: 'TOGGLE' }),
+          sendTo('myActor', 'TOGGLE'),
+          sendTo('myActor', { type: 'TOGGLE' }),
+          forwardTo('myActor'),
         ],
       })
     `,
@@ -71,6 +74,8 @@ const tests = {
             respond('My Event'),
             raise('myEvent.click'),
             send({ type: 'myEvent' }),
+            sendTo('myActor', 'myEvent2'),
+            sendTo('myActor', { type: 'myEvent3' }),
           ],
         })
       `,
@@ -114,6 +119,14 @@ const tests = {
           messageId: 'invalidEventName',
           data: { eventName: 'myEvent', fixedEventName: 'MY_EVENT' },
         },
+        {
+          messageId: 'invalidEventName',
+          data: { eventName: 'myEvent2', fixedEventName: 'MY_EVENT_2' },
+        },
+        {
+          messageId: 'invalidEventName',
+          data: { eventName: 'myEvent3', fixedEventName: 'MY_EVENT_3' },
+        },
       ],
       output: `
         createMachine({
@@ -129,6 +142,8 @@ const tests = {
             respond('MY_EVENT'),
             raise('MY_EVENT.CLICK'),
             send({ type: 'MY_EVENT' }),
+            sendTo('myActor', 'MY_EVENT_2'),
+            sendTo('myActor', { type: 'MY_EVENT_3' }),
           ],
         })
       `,
@@ -150,6 +165,8 @@ const tests = {
             respond('My Event'),
             raise('myEvent.click'),
             send({ type: 'myEvent' }),
+            sendTo('myActor', 'myEvent2'),
+            sendTo('myActor', { type: 'myEvent3' }),
           ],
         })
       `,
@@ -193,6 +210,14 @@ const tests = {
           messageId: 'invalidEventName',
           data: { eventName: 'myEvent', fixedEventName: 'my_event' },
         },
+        {
+          messageId: 'invalidEventName',
+          data: { eventName: 'myEvent2', fixedEventName: 'my_event_2' },
+        },
+        {
+          messageId: 'invalidEventName',
+          data: { eventName: 'myEvent3', fixedEventName: 'my_event_3' },
+        },
       ],
       output: `
         /* eslint event-names: [ "warn", "snakeCase" ] */
@@ -209,6 +234,8 @@ const tests = {
             respond('my_event'),
             raise('my_event.click'),
             send({ type: 'my_event' }),
+            sendTo('myActor', 'my_event_2'),
+            sendTo('myActor', { type: 'my_event_3' }),
           ],
         })
       `,
@@ -230,6 +257,8 @@ const tests = {
             respond('My Event'),
             raise('my_event.click'),
             send({ type: 'my_event' }),
+            sendTo('myActor', 'my_event_2'),
+            sendTo('myActor', { type: 'my_event_3' }),
           ],
         })
       `,
@@ -273,6 +302,14 @@ const tests = {
           messageId: 'invalidEventName',
           data: { eventName: 'my_event', fixedEventName: 'myEvent' },
         },
+        {
+          messageId: 'invalidEventName',
+          data: { eventName: 'my_event_2', fixedEventName: 'myEvent2' },
+        },
+        {
+          messageId: 'invalidEventName',
+          data: { eventName: 'my_event_3', fixedEventName: 'myEvent3' },
+        },
       ],
       output: `
         /* eslint event-names: [ "warn", "camelCase" ] */
@@ -289,6 +326,8 @@ const tests = {
             respond('myEvent'),
             raise('myEvent.click'),
             send({ type: 'myEvent' }),
+            sendTo('myActor', 'myEvent2'),
+            sendTo('myActor', { type: 'myEvent3' }),
           ],
         })
       `,
@@ -303,10 +342,18 @@ const tests = {
             respond('*'),
             raise('EVENT.*'),
             send({ type: 'EVENT.*' }),
+            sendTo('myActor', 'EVENT.*'),
+            sendTo('myActor', { type: 'EVENT.*' }),
           ],
         })
       `,
       errors: [
+        {
+          messageId: 'invalidSendEventName',
+        },
+        {
+          messageId: 'invalidSendEventName',
+        },
         {
           messageId: 'invalidSendEventName',
         },
