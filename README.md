@@ -140,8 +140,8 @@ By default, the plugin lints only code within the `createMachine` or `Machine` c
 
 ```js
 /* eslint-plugin-xstate-include */
-// 💡 This machine config will no w be linted too.
-export machine = {
+// 💡 This machine config will now be linted too.
+export const machine = {
   initial: 'active',
   context: {},
   // etc
