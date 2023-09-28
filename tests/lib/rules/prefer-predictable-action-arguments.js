@@ -45,17 +45,40 @@ const tests = {
           predictableActionArguments: false
         })
       `,
-      errors: [{ messageId: 'preferPredictableActionArguments' }],
-      output: `
+      errors: [
+        {
+          messageId: 'preferPredictableActionArguments',
+          suggestions: [
+            {
+              messageId: 'changeToTrue',
+              output: `
         createMachine({
           predictableActionArguments: true
         })
       `,
+            },
+          ],
+        },
+      ],
     }),
     withVersion(5, {
       code: `
         createMachine({
           predictableActionArguments: false
+        })
+      `,
+      errors: [{ messageId: 'deprecatedPredictableActionArguments' }],
+      output: `
+        createMachine({
+          
+        })
+      `,
+    }),
+    // also removes a comma if there
+    withVersion(5, {
+      code: `
+        createMachine({
+          predictableActionArguments: false,
         })
       `,
       errors: [{ messageId: 'deprecatedPredictableActionArguments' }],
@@ -69,10 +92,19 @@ const tests = {
       code: `
         createMachine({})
       `,
-      errors: [{ messageId: 'preferPredictableActionArguments' }],
-      output: `
+      errors: [
+        {
+          messageId: 'preferPredictableActionArguments',
+          suggestions: [
+            {
+              messageId: 'insertPredictableActionArguments',
+              output: `
         createMachine({ predictableActionArguments: true })
       `,
+            },
+          ],
+        },
+      ],
     }),
     withVersion(4, {
       code: `
@@ -80,13 +112,22 @@ const tests = {
           initial: 'ready'
         })
       `,
-      errors: [{ messageId: 'preferPredictableActionArguments' }],
-      output: `
+      errors: [
+        {
+          messageId: 'preferPredictableActionArguments',
+          suggestions: [
+            {
+              messageId: 'insertPredictableActionArguments',
+              output: `
         createMachine({
           predictableActionArguments: true,
-initial: 'ready'
+          initial: 'ready'
         })
       `,
+            },
+          ],
+        },
+      ],
     }),
     withVersion(4, {
       code: `
@@ -95,15 +136,24 @@ initial: 'ready'
           predictableActionArguments: 42
         })
       `,
-      errors: [{ messageId: 'preferPredictableActionArguments' }],
-      output: `
+      errors: [
+        {
+          messageId: 'preferPredictableActionArguments',
+          suggestions: [
+            {
+              messageId: 'changeToTrue',
+              output: `
         createMachine({
           states: {},
           predictableActionArguments: true
         })
       `,
+            },
+          ],
+        },
+      ],
     }),
-    // errors reported outside of createMachine if there is the comment directive
+    // // errors reported outside of createMachine if there is the comment directive
     withVersion(4, {
       code: `
         /* eslint-plugin-xstate-include */
@@ -111,14 +161,23 @@ initial: 'ready'
           context: {},
         }
       `,
-      errors: [{ messageId: 'preferPredictableActionArguments' }],
-      output: `
+      errors: [
+        {
+          messageId: 'preferPredictableActionArguments',
+          suggestions: [
+            {
+              messageId: 'insertPredictableActionArguments',
+              output: `
         /* eslint-plugin-xstate-include */
         const config = {
           predictableActionArguments: true,
-context: {},
+          context: {},
         }
       `,
+            },
+          ],
+        },
+      ],
     }),
     withVersion(4, {
       code: `
@@ -128,21 +187,30 @@ context: {},
           context: {},
         }
       `,
-      errors: [{ messageId: 'preferPredictableActionArguments' }],
-      output: `
+      errors: [
+        {
+          messageId: 'preferPredictableActionArguments',
+          suggestions: [
+            {
+              messageId: 'changeToTrue',
+              output: `
         /* eslint-plugin-xstate-include */
         const config = {
           predictableActionArguments: true,
           context: {},
         }
       `,
+            },
+          ],
+        },
+      ],
     }),
     withVersion(5, {
       code: `
         /* eslint-plugin-xstate-include */
         const config = {
           context: {},
-          predictableActionArguments: false
+          predictableActionArguments: false,
         }
       `,
       errors: [{ messageId: 'deprecatedPredictableActionArguments' }],
@@ -152,6 +220,22 @@ context: {},
           context: {},
           
         }
+      `,
+    }),
+    // // error reported even if there is no context property, because we are within the createMachine call
+    withVersion(5, {
+      code: `
+        /* eslint-plugin-xstate-include */
+        const machine = createMachine({
+          predictableActionArguments: false
+        })
+      `,
+      errors: [{ messageId: 'deprecatedPredictableActionArguments' }],
+      output: `
+        /* eslint-plugin-xstate-include */
+        const machine = createMachine({
+          
+        })
       `,
     }),
   ],
