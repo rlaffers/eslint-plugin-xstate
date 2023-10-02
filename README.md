@@ -3,7 +3,7 @@
 ESLint plugin to check for common mistakes and enforce good practices when using [XState library](https://xstate.js.org/).
 
 [![npm version](https://img.shields.io/npm/v/eslint-plugin-xstate)](https://npmjs.com/package/eslint-plugin-xstate)
-![build status](https://img.shields.io/github/actions/workflow/status/rlaffers/eslint-plugin-xstate/main.yml)
+[![build status](https://img.shields.io/github/actions/workflow/status/rlaffers/eslint-plugin-xstate/main.yml)](https://github.com/rlaffers/eslint-plugin-xstate/actions/workflows/main.yml)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
