@@ -15,18 +15,18 @@ createMachine({
   states: {
     inactive: {
       invoke: {
-        src: () => Promise.resolve(42) // inlined service
+        src: () => Promise.resolve(42), // inlined service
       },
       on: {
         TRIGGER: {
           target: 'active',
           cond: () => {}, // inlined guard
-          actions: () => {} // inlined action
-        }
+          actions: () => {}, // inlined action
+        },
       },
-      activities: () => {} // inlined activity
-    }
-  }
+      activities: () => {}, // inlined activity
+    },
+  },
 })
 
 // ❌ using variable references is not recommended for the same reasons
@@ -34,18 +34,18 @@ createMachine({
   states: {
     inactive: {
       invoke: {
-        src: someMachine // defined elsewhere
+        src: someMachine, // defined elsewhere
       },
       on: {
         TRIGGER: {
           target: 'active',
           cond: isEnoughFuel, // defined elsewhere
-          actions: huffAndPuff // defined elsewhere
-        }
+          actions: huffAndPuff, // defined elsewhere
+        },
       },
-      activities: beep // defined elsewhere
-    }
-  }
+      activities: beep, // defined elsewhere
+    },
+  },
 })
 ```
 
