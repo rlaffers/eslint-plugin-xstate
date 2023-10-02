@@ -2,11 +2,7 @@
   "name": "eslint-plugin-xstate",
   "version": "0.0.0-semantically-released",
   "description": "ESLint rules for XState",
-  "keywords": [
-    "eslint",
-    "eslintplugin",
-    "eslint-plugin"
-  ],
+  "keywords": ["eslint", "eslintplugin", "eslint-plugin"],
   "author": "Richard Laffers",
   "main": "lib/index.js",
   "scripts": {
@@ -14,6 +10,7 @@
     "test:watch": "jest --watch",
     "lint": "eslint lib/",
     "format": "prettier --write README.md {lib,docs,tests}/**/*.{js,md}",
+    "format:check": "prettier --check README.md {lib,docs,tests}/**/*.{js,md}",
     "prepare": "husky install",
     "semantic-release": "semantic-release"
   },
