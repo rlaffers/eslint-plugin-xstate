@@ -1,0 +1,13 @@
+name: Pull request code check
+on:
+  pull_request:
+    branches:
+      - master
+
+permissions:
+  contents: read
+
+jobs:
+  check_code:
+    name: Check code & test
+    uses: ./.github/workflows/test.yml
