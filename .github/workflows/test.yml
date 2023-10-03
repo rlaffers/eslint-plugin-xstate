@@ -1,4 +1,4 @@
-name: Health check
+name: Code compliance
 on:
   workflow_call:
   
@@ -7,8 +7,8 @@ permissions:
   contents: read # for checkout
       
 jobs:
-  check:
-    name: Check
+  check_code:
+    name: Check and test
     runs-on: ubuntu-latest
     permissions:
       contents: read    
