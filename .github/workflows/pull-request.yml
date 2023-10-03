@@ -1,4 +1,4 @@
-name: Pull request
+name: Pull request code check
 on:
   pull_request:
     branches:
