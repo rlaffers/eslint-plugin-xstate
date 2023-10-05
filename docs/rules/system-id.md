@@ -1,10 +1,10 @@
-# Suggest valid systemId for invoked or spawned actors
+# Suggest using systemId for invoked or spawned actors
 
 Provide `systemId` for invoked and spawned actors to make them available in the `actor.system` registry.
 
 ## Rule Details
 
-Specifying a `systemId` property within `invoke` blocks, and within options passed as a second argument to `spawn` calls, will make the actor available in the `actor.system` registry.
+Specifying a `systemId` property within `invoke` blocks, and within options passed as the second argument to `spawn` calls, will make the actor available in the `actor.system` registry.
 
 **The `systemId` property is supported in XState version 5 and above.**
 
@@ -51,7 +51,7 @@ createMachine({
     playing: {
       invoke: {
         src: 'game',
-        system: 'actor1',
+        systemId: 'actor1',
       },
       entry: assign({
         gameRef: () => spawn(game, { systemId: 'actor1' }),
