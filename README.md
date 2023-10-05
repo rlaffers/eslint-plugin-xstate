@@ -53,7 +53,7 @@ Then configure the rules you want to use under the rules section.
     "xstate/state-names": ["warn", "camelCase"],
     "xstate/no-inline-implementation": "warn",
     "xstate/no-auto-forward": "warn",
-    "xstate/system-id": "warn",
+    "xstate/system-id": "warn"
   }
 }
 ```
@@ -77,6 +77,7 @@ There is also an `all` configuration which includes every available rule. It enf
 ```
 
 ### XState Version
+
 The default shareable configurations are for XState v5. If you use XState version 4, append `_v4` to the name of the configuration you want to use.
 
 ```json
@@ -92,6 +93,7 @@ The default shareable configurations are for XState v5. If you use XState versio
 ```
 
 If you do not use shareable configs, you need to manually specify the XState version in the ESLint config (defaults to 5):
+
 ```json
 {
   "settings": {
@@ -122,13 +124,13 @@ If you do not use shareable configs, you need to manually specify the XState ver
 
 ### Best Practices
 
-| Rule                                                               | Description                                                             | Recommended        |
-| ------------------------------------------------------------------ | ----------------------------------------------------------------------- | ------------------ |
-| [no-inline-implementation](docs/rules/no-inline-implementation.md) | Suggest refactoring guards, actions and services into machine options   |                    |
-| [prefer-always](docs/rules/prefer-always.md)                       | Suggest using the `always` syntax for transient (eventless) transitions | :heavy_check_mark: |
-| [prefer-predictable-action-arguments](docs/rules/prefer-predictable-action-arguments.md) | Suggest turning on the `predictableActionArguments` option | :heavy_check_mark: |
-| [no-auto-forward](docs/rules/no-auto-forward.md)                   | Forbid auto-forwarding events to invoked services or spawned actors     |                    |
-| [system-id](docs/rules/system-id.md)                               | Suggest using systemId for invoked or spawned actors                    |                    |
+| Rule                                                                                     | Description                                                             | Recommended        |
+| ---------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- | ------------------ |
+| [no-inline-implementation](docs/rules/no-inline-implementation.md)                       | Suggest refactoring guards, actions and services into machine options   |                    |
+| [prefer-always](docs/rules/prefer-always.md)                                             | Suggest using the `always` syntax for transient (eventless) transitions | :heavy_check_mark: |
+| [prefer-predictable-action-arguments](docs/rules/prefer-predictable-action-arguments.md) | Suggest turning on the `predictableActionArguments` option              | :heavy_check_mark: |
+| [no-auto-forward](docs/rules/no-auto-forward.md)                                         | Forbid auto-forwarding events to invoked services or spawned actors     |                    |
+| [system-id](docs/rules/system-id.md)                                                     | Suggest using systemId for invoked or spawned actors                    |                    |
 
 ### Stylistic Issues
 
