@@ -11,7 +11,7 @@ While the XState library neither enforces nor recommends any particular format f
 - camelCase
 - regular expression
 
-The default MACRO*CASE for event names is an *unofficial* convention, typically used within the XState community.
+The default MACRO*CASE for event names is an *unofficial\* convention, typically used within the XState community.
 
 Examples of **incorrect** code for this rule:
 
