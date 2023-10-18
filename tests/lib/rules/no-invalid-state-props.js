@@ -71,6 +71,7 @@ const tests = {
         types: {},
         entry: 'log',
         exit: 'log',
+        output: { answer: 42 },
         states: {
           idle: {
             type: 'parallel',
