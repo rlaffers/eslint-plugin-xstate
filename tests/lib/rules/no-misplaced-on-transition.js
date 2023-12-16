@@ -38,6 +38,21 @@ const tests = {
         },
       })
     `,
+    // no errors outside of createmachine by default
+    `
+      const config = {
+        states: {
+          on: {
+            EVENT: 'passive',
+          },
+        },
+        invoke: {
+          on: {
+            EVENT: 'passive',
+          },
+        }
+      }
+    `,
   ],
   invalid: [
     {
@@ -69,6 +84,28 @@ const tests = {
         })
       `,
       errors: [{ messageId: 'onTransitionInsideInvokeForbidden' }],
+    },
+    // errors reported outside of createMachine if there is the comment directive
+    {
+      code: `
+        /* eslint-plugin-xstate-include */
+        const config = {
+          states: {
+            on: {
+              EVENT: 'passive',
+            },
+          },
+          invoke: {
+            on: {
+              EVENT: 'passive',
+            },
+          }
+        }
+      `,
+      errors: [
+        { messageId: 'onTransitionInsideStatesForbidden' },
+        { messageId: 'onTransitionInsideInvokeForbidden' },
+      ],
     },
   ],
 }

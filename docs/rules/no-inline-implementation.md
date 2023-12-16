@@ -7,6 +7,17 @@ Suggest moving implementations of actions, guards, activities and services into 
 Action/guard/activity/service implementation can be quickly prototyped by specifying inline functions directly in the machine config.
 Although this is convenient, this makes it difficult to debug, test, serialize and accurately visualize actions. It is recommended to refactor inline implementations into the machine options object.
 
+### XState v5
+
+In XState v5 some built-in action creators were removed, so this rule will report an error when they are inlined:
+
+- `respond`
+- `send`: removed in favor of `raise` and `sendParent`
+- `sendUpdate`
+- `start`
+
+XState v5 provides some built-in higher level guards: `and`, `or`, `not`, `stateIn`. These are always fine to use.
+
 Examples of **incorrect** code for this rule:
 
 ```javascript
@@ -25,6 +36,12 @@ createMachine({
         },
       },
       activities: () => {}, // inlined activity
+      entry: assign({
+        childActor: () =>
+          spawn(
+            () => {} // inlined actor
+          ),
+      }),
     },
   },
 })
@@ -44,6 +61,12 @@ createMachine({
         },
       },
       activities: beep, // defined elsewhere
+      entry: assign({
+        childActor: () =>
+          spawn(
+            childMachine // inlined actor
+          ),
+      }),
     },
   },
 })
@@ -58,33 +81,38 @@ createMachine(
     states: {
       inactive: {
         invoke: {
-          src: 'someMachine'
+          src: 'someMachine',
         },
         on: {
           TRIGGER: {
             target: 'active',
             cond: 'isEnoughFuel',
-            actions: ['huffAndPuff', 'log'] // arrays are ok too
-          }
+            actions: ['huffAndPuff', 'log'], // arrays are ok too
+          },
         },
-        activities: 'beep'
-      }
-    }
+        activities: 'beep',
+        entry: assign({
+          childActor: () => spawn('childMachine'),
+        }),
+      },
+    },
   },
   {
+    // "services" in XState v4, renamed to "actors" in XState v5
     services: {
-      someMachine: () => {}
+      someMachine: () => {},
     },
     guards: {
-      isEnoughFuel: () => true
+      isEnoughFuel: () => true,
     },
     actions: {
       huffAndPuff: () => {},
-      log: () => {}
+      log: () => {},
     },
+    // only in XState v4
     activities: {
-      beep: () => {}
-    }
+      beep: () => {},
+    },
   }
 )
 
@@ -96,53 +124,73 @@ createMachine({
       entry: assign({ count: 1 }),
       on: {
         TRIGGER: {
-          actions: [assign({ count: 0 }), send('EVENT')] // arrays are ok too
-        }
-      }
-    }
-  }
+          actions: [assign({ count: 0 }), raise({ type: 'EVENT' })], // arrays are ok too
+        },
+      },
+    },
+  },
 })
 
 // ✅ inlined guard creator calls are ok if they match guardCreatorRegex
-/* eslint no-inline-implementation: [ "warn", { "guardCreatorRegex": "^(and|or|not)$" } ] */
+/* eslint no-inline-implementation: [ "warn", { "guardCreatorRegex": "^customGuard$" } ] */
 createMachine({
   states: {
     inactive: {
       on: {
         BUTTON_CLICKED: {
-          cond: and(['isStartButton', 'isReady'])
-          target: 'active'
-        }
-      }
-    }
-  }
+          cond: customGuard(['isStartButton', 'isReady']),
+          target: 'active',
+        },
+      },
+    },
+  },
 })
 
-// ✅ inlined guard creator calls are ok if they match actionCreatorRegex
+// ✅ inlined built-in guards are ok with XState v5
+createMachine({
+  states: {
+    inactive: {
+      on: {
+        BUTTON_CLICKED: [
+          {
+            guard: and(['isStartButton', 'isDoubleClick']),
+            target: 'active',
+          },
+          {
+            guard: stateIn('mode.active'),
+            target: 'inactive',
+          },
+        ],
+      },
+    },
+  },
+})
+
+// ✅ inlined action creator calls are ok if they match actionCreatorRegex
 /* eslint no-inline-implementation: [ "warn", { "actionCreatorRegex": "^customAction$" } ] */
 createMachine({
   states: {
     inactive: {
       on: {
         BUTTON_CLICKED: {
-          target: 'active'
+          target: 'active',
           actions: customAction(),
-        }
-      }
-    }
-  }
+        },
+      },
+    },
+  },
 })
 
-// ✅ inlined service creator calls are ok if they match serviceCreatorRegex
-/* eslint no-inline-implementation: [ "warn", { "serviceCreatorRegex": "^customService$" } ] */
+// ✅ inlined actor creator calls are ok if they match actorCreatorRegex
+/* eslint no-inline-implementation: [ "warn", { "actorCreatorRegex": "^customActor" } ] */
 createMachine({
   states: {
     inactive: {
       invoke: {
-        src: createService()
-      }
-    }
-  }
+        src: customActor(),
+      },
+    },
+  },
 })
 ```
 
@@ -153,7 +201,7 @@ createMachine({
 | `allowKnownActionCreators` | No       | `false` | Inlined action creators are visualized properly (but still difficult to test, debug and serialize). Setting this option to `true` will turn off the rule for [known action creators](https://xstate.js.org/docs/guides/actions.html) used inline. |
 | `guardCreatorRegex`        | No       | `''`    | Use a regular expression to allow custom guard creators.                                                                                                                                                                                          |
 | `actionCreatorRegex`       | No       | `''`    | Use a regular expression to allow custom action creators.                                                                                                                                                                                         |
-| `serviceCreatorRegex`      | No       | `''`    | Use a regular expression to allow custom service creators.                                                                                                                                                                                        |
+| `actorCreatorRegex`        | No       | `''`    | Use a regular expression to allow custom actor creators.                                                                                                                                                                                          |
 
 ## Example
 
@@ -182,7 +230,7 @@ createMachine({
 {
   "xstate/no-inline-implementation": [
     "warn",
-    { "serviceCreatorRegex": "^customService$" }
+    { "actorCreatorRegex": "^customActor$" }
   ]
 }
 ```

@@ -6,6 +6,8 @@ Prefer sending events explicitly to child actors/services.
 
 Avoid blindly forwarding all events to invoked services or spawned actors - it may lead to unexpected behavior or infinite loops. The official documentation [suggests sending events explicitly](https://xstate.js.org/docs/guides/communication.html#the-invoke-property) with the [`forwardTo`](https://xstate.js.org/docs/guides/actions.html#forward-to-action) or `send` action creators.
 
+**XState v5 removed the `autoForward` option. This rule will report errors if `autoForward` is used with XState v5.**
+
 Examples of **incorrect** code for this rule:
 
 ```javascript
@@ -33,7 +35,7 @@ createMachine({
 })
 ```
 
-Examples of **correct** code for this rule:
+Examples of **correct** code for this rule (XState v4 only):
 
 ```javascript
 // ✅ no auto-forward

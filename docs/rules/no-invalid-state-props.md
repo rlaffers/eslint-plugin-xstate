@@ -18,6 +18,20 @@ Certain properties accept specific values only:
 - `type` can be one of: "atomic", "compound", "parallel", "history", "final".
 - `history` can be one of: "shallow", "deep".
 
+### XState v5
+
+In XState v5 some props are no longer valid on state nodes:
+
+- `activities`
+- `data`: removed in favor of a new prop `output`
+- `strict`
+- `schema`: removed in favor of a new prop `types`
+- `tsTypes`: removed in favor of a new prop `types`
+- `preserveActionOrder`
+- `predictableActionArguments`
+
+If the above props are used with XState v5, this rule will report an error.
+
 Examples of **incorrect** code for this rule:
 
 ```javascript
@@ -71,13 +85,61 @@ createMachine({
 Examples of **correct** code for this rule:
 
 ```javascript
-// ✅ all state props are valid
+// ✅ all state props are valid (XState v4)
 createMachine({
   id: 'root',
+  strict: true,
   description: 'this is the main machine',
   predictableActionArguments: true,
+  preserveActionOrder: true,
+  tsTypes: {},
+  schema: {},
   context: {}, // valid in the root node
-  initial: 'idle'
+  initial: 'idle',
+  states: {
+    idle: {
+      type: 'parallel',
+      entry: 'log',
+      exit: 'log',
+      always: [],
+      after: {},
+      states: {},
+      onDone: {},
+      on: {},
+      tags: ['off'],
+      activities: ['beeping'],
+    },
+    busy: {
+      type: 'compound',
+      initial: 'reading',
+      states: {
+        hist: {
+          type: 'history',
+          history: 'deep',
+          target: 'writing',
+        },
+        reading: {
+          meta: {
+            value: 42,
+          },
+        },
+        writing: {},
+      },
+    },
+    done: {
+      type: 'final',
+      data: { answer: 42 },
+    },
+  },
+})
+
+// ✅ all state props are valid (XState v5)
+createMachine({
+  id: 'root',
+  types: {},
+  description: 'this is the main machine',
+  context: {}, // valid in the root node
+  initial: 'idle',
   states: {
     idle: {
       type: 'parallel',
@@ -106,6 +168,10 @@ createMachine({
         },
         writing: {},
       },
+    },
+    done: {
+      type: 'final',
+      output: { answer: 42 },
     },
   },
 })

@@ -392,6 +392,43 @@ const tests = {
         },
       ],
     },
+    {
+      // If xstate linting is enforced over the entire file, errors are reported even outside of createMachine calls
+      code: `
+        /* eslint-plugin-xstate-include */
+        const obj = {
+          on: {
+            thisIsNotEvent: 'foo',
+            'neither.is.this': 'foo',
+          }
+        }
+      `,
+      errors: [
+        {
+          messageId: 'invalidEventName',
+          data: {
+            eventName: 'thisIsNotEvent',
+            fixedEventName: 'THIS_IS_NOT_EVENT',
+          },
+        },
+        {
+          messageId: 'invalidEventName',
+          data: {
+            eventName: 'neither.is.this',
+            fixedEventName: 'NEITHER.IS.THIS',
+          },
+        },
+      ],
+      output: `
+        /* eslint-plugin-xstate-include */
+        const obj = {
+          on: {
+            THIS_IS_NOT_EVENT: 'foo',
+            'NEITHER.IS.THIS': 'foo',
+          }
+        }
+      `,
+    },
   ],
 }
 

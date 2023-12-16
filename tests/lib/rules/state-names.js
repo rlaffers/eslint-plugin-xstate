@@ -55,6 +55,25 @@ const tests = {
         },
       })
     `,
+    // no errors outside of createMachine by default
+    `
+      const config = {
+        states: {
+          PowerOn: {},
+          power_on: {},
+          'power:on': {},
+          'power.on': {},
+          entry: {},
+        },
+        onDone: 'power_on',
+        on: {
+          CLICK: 'power_on',
+          BUMP: {
+            target: 'power_on',
+          }
+        }
+      }
+    `,
   ],
 
   invalid: [
@@ -275,6 +294,85 @@ const tests = {
             },
           },
         })
+      `,
+    },
+    // report errors outside of createMachine if there is the comment directive
+    {
+      code: `
+        /* eslint-plugin-xstate-include */
+        const config = {
+          states: {
+            PowerOn: {},
+            power_on: {},
+            'power:on': {},
+            'power.on': {},
+            entry: {},
+            someState: {
+              on: {
+                CLICK: 'power_shut',
+                BUMP: {
+                  target: 'power_kill',
+                },
+              },
+            },
+          },
+          onDone: 'power_off',
+        }
+      `,
+      errors: [
+        {
+          messageId: 'invalidStateName',
+          data: { name: 'PowerOn', fixedName: 'powerOn' },
+        },
+        {
+          messageId: 'invalidStateName',
+          data: { name: 'power_on', fixedName: 'powerOn' },
+        },
+        {
+          messageId: 'invalidStateName',
+          data: { name: 'power:on', fixedName: 'powerOn' },
+        },
+        {
+          messageId: 'invalidStateName',
+          data: { name: 'power.on', fixedName: 'powerOn' },
+        },
+        {
+          messageId: 'stateNameIsReservedWord',
+          data: { name: 'entry' },
+        },
+        {
+          messageId: 'invalidStateName',
+          data: { name: 'power_shut', fixedName: 'powerShut' },
+        },
+        {
+          messageId: 'invalidStateName',
+          data: { name: 'power_kill', fixedName: 'powerKill' },
+        },
+        {
+          messageId: 'invalidStateName',
+          data: { name: 'power_off', fixedName: 'powerOff' },
+        },
+      ],
+      output: `
+        /* eslint-plugin-xstate-include */
+        const config = {
+          states: {
+            powerOn: {},
+            powerOn: {},
+            powerOn: {},
+            powerOn: {},
+            entry: {},
+            someState: {
+              on: {
+                CLICK: 'powerShut',
+                BUMP: {
+                  target: 'powerKill',
+                },
+              },
+            },
+          },
+          onDone: 'powerOff',
+        }
       `,
     },
   ],
